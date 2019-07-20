@@ -47,6 +47,6 @@ class Weapon
 class Room
 {
   1 -- * RoomCell;
-  * -- * RoomEntranceCell;
+  1 -- * RoomEntranceCell;
 }
 
