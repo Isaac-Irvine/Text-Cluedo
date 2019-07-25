@@ -10,6 +10,13 @@ class Cell
 {
   int y;
   int x;
+  1 -- 0..1 Item item;
+public Boolean isFree(){
+
+}
+public Character getChar(){
+
+}
 }
 
 class RoomEntranceCell
@@ -69,22 +76,28 @@ class Card
 class Item
 {
   1 -- 1 Card;
-  1 -- 1 Cell location;
+  }
+
+
+
+class WallCell
+{
+  isA Cell;
 }
-
-
 
 class Board
 {
   position 216 102 109 41;
   position.association Board__Room 58,41 16,0;
+  position.association Board__Cell 22,61 177,0;
 }
 
 class Cell
 {
-  position 113 319 109 58;
+  position 91 232 181 129;
   position.association Cell__Suspect 109,23 0,23;
   position.association Cell__Item 109,18 0,41;
+  position.association Cell__Item 181,40 0,38;
 }
 
 class RoomEntranceCell
@@ -148,5 +161,5 @@ class Card
 class Item
 {
   position 811 176 112 41;
-  position.association Card__Item 76,0 29,75;
-}//$?[End_of_model]$?
+  position.association Card__Item 79,0 27,95;
+  }
