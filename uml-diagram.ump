@@ -21,7 +21,8 @@ public Character getChar(){
 
 class RoomEntranceCell
 {
-  isA Cell;
+  Direction direction;
+isA Cell;
 }
 
 class EmptyCell
@@ -102,7 +103,7 @@ class Cell
 
 class RoomEntranceCell
 {
-  position 375 446 134 41;
+  position 375 446 134 61;
 }
 
 class EmptyCell
@@ -162,4 +163,9 @@ class Item
 {
   position 811 176 112 41;
   position.association Card__Item 79,0 27,95;
-  }
+  }//$?[End_of_model]$?
+
+class WallCell
+{
+  position 105 515 109 61;
+}
