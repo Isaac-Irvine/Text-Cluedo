@@ -1,0 +1,68 @@
+
+
++--------+-+--+----------+
+|+----++-+ |  | +-++----+|
+||    ++   |  |   ++    ||
+||kit |  +-+  +-+  |con ||
+||    |  | ball |  |    ||
+||    |  |      |  #    ||
+||    |  #      #   +---+|
+|+---#+  |      |        |
+|        +#----#+       +|
+|+                 +----+|
+|+---+             #    ||
+||   +--+  +---+   |bil ||
+|| din  |  |   |   |    ||
+||      #  |   |   +---#+|
+||      |  |   |        ||
+||      |  |   |   +-#--+|
+|+-----#+  |   |  ++lib ||
+++         +---+  #     ||
+|                 ++    ||
+++        +-##-+   +----+|
+|+-----#  |hal |         |
+||lou  |  |    #        +|
+||     |  |    |  #-----+|
+||     |  |    |  |stu  ||
+||     |  |    |  |     ||
+||     | ++    ++ +     ||
+++-----+-+-----+--+-----++
+
+
+
+
+
+
+P = player space in room
+F = free space that can be walked on
+D = Door
+X = Not free. Cant be walked on
+S = staring postion for player
+
+XXXXXXXXXXXXXXXXXXXXXXXXXX
+XXXXXXXXXXSXXXXSXXXXXXXXXX
+XXXXXXXXFFFXXXXFFFXXXXXXXX
+XXXXXXXFFXXXXXXXXFFXXXXXXX
+XXPPPPXFFXXXXXXXXFFXPPPPXX
+XXPPXXXFFXPPPPPPXFFDPPXXXX
+XXXXXXXFFXXXXXXXXFFXXXXXXX
+XXXXXXXFFXXXXXXXXFFFFFFFSX
+XSFFFFFFFXXXXXXXXFFFFFFFXX
+XXFFFFFFFFFFFFFFFFFXXXXXXX
+XXXXXXFFFFFFFFFFFFFXPPPPXX
+XXXXXXXXXFFXXXXXFFFXXXXXXX
+XXXXXXXXXFFXXXXXFFFXPPXXXX
+XXXXXXXXDFFXXXXXFFFXXXXXXX
+XXPPPPPPXFFXXXXXFFFFFFFFXX
+XXXXXXXXXFFXXXXXFFFXXDXXXX
+XXXXXXXXXFFXXXXXFFXXXXXXXX
+XXFFFFFFFFFXXXXXFFDPPPPPXX
+XSFFFFFFFFFFFFFFFFXXPXXXXX
+XXFFFFFFFFXXXXXXFFFXXXXXXX
+XXXXXXXXFFXXXXXXFFFFFFFFSX
+XXXXXXXXFFXPPPPDFFFFFFFFXX
+XXPPPPPXFFXPPXXXFFXXXXXXXX
+XXPXXXXXFFXXXXXXFFXXXXXXXX
+XXXXXXXXFFXXXXXXFFXPPPPPXX
+XXXXXXXXSXXXXXXXXFXPXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXX
