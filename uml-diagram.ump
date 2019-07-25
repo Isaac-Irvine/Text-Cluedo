@@ -14,7 +14,7 @@ class Cell
 public Boolean isFree(){
 
 }
-public Character getChar(){
+public Character[] getChars(){
 
 }
 }
