@@ -1,77 +1,96 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-	private static final int WIDTH = 26;
-	private static final int HEIGHT = 27;
+    private final int width;
+    private final int height;
+    private Cell[][] cells;
+    private List<Suspect> allSuspects;
+    private List<Room> allRooms;
+    private List<Weapon> allWeapons;
 
-	private Cell[][] cells;
-	private List<Suspect> allSuspects;
-	private List<Room> allRooms;
-	private List<Weapon> allWeapons;
+    /**
+     * Initialize the board by loading from a file.
+     */
+    public Board(File file, int width, int height) {
+        this.width = width;
+        this.height = height;
 
-	/**
-	 * Initialize the board.
-	 * <p>
-	 * TODO: Load from file instead of hardcoded
-	 */
-	public Board() {
-		allSuspects = new ArrayList<>();
-		allRooms = new ArrayList<>();
-		allWeapons = new ArrayList<>();
+        char[][] walls = new char[height][width]; // 1 char per cell, represents if a wall or a free cell or a room.
+        char[][][] boardString = new char[height][width][2]; // 2 chars per cell
+        cells = new Cell[height][width];
 
-		cells = new Cell[WIDTH][HEIGHT];
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
 
-		// default all cells are empty
-		for (int x = 0; x < WIDTH; x++) {
-			for (int y = 0; y < WIDTH; y++) {
-				cells[x][y] = new FreeCell(x, y);
-			}
-		}
+            String line;
+
+            // process the board string
+            for (int y = 0; y < height; y++) {
+                line = reader.readLine();
+                for (int x = 0; x < width; x++) {
+                    boardString[y][x][0] = line.charAt(x * 2);
+                    boardString[y][x][1] = line.charAt(x * 2 + 1);
+                }
+            }
+
+            // process the walls/floor
+            for (int y = 0; y < height; y++) {
+                line = reader.readLine();
+                for (int x = 0; x < width; x++) {
+                    walls[y][x] = line.charAt(x);
+                }
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+
+        // create all the cells
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // get cell type at this position
+                char cellType = walls[y][x];
+
+                // create cell object
+                Cell cell;
+
+                switch (cellType) {
+                    case 'X':
+                    case '#':
+                        cell = new WallCell(x, y, new char[]{boardString[y][x][0], boardString[y][x][1]});
+                        break;
+                    default:
+                        cell = new FreeCell(x, y);
+                }
+
+                cells[y][x] = cell;
+            }
+        }
+    }
 
 
-		// outside wall
-		cells[0][0] = new WallCell(0, 0, new char[]{'+', '+'});
-		cells[WIDTH - 1][0] = new WallCell(0, 0, new char[]{'+', '+'});
-		cells[0][HEIGHT - 1] = new WallCell(0, 0, new char[]{'+', '+'});
-		cells[WIDTH - 1][HEIGHT - 1] = new WallCell(0, 0, new char[]{'+', '+'});
-		for (int x = 1; x < WIDTH - 1; x++) {
-			cells[x][0] = new WallCell(x, 0, new char[]{'-', '-'});
-			cells[x][HEIGHT - 1] = new WallCell(x, HEIGHT - 1, new char[]{'-', '-'});
-		}
-		for (int y = 1; y < HEIGHT - 1; y++) {
-			cells[0][y] = new WallCell(0, y, new char[]{'|', '|'});
-			cells[WIDTH - 1][y] = new WallCell(WIDTH - 1, y, new char[]{'|', '|'});
-		}
-
-		// cellar
-		for (int x = 11; x < 16; x++) {
-			for (int y = 11; y < 18; y++) {
-				cells[x][y] = new WallCell(x, y,new char[]{'+','+'});
-			}
-		}
-
-		// kitchen
-		Room kitchen = new Room();
-	}
-
-
-	/**
-	 * The entire board as a string
-	 *
-	 * @return
-	 */
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		for (int y = 0; y < HEIGHT; y++) {
-			for (int x = 0; x < WIDTH; x++) {
-				Cell cell = cells[x][y];
-				sb.append(cell.getChars()[0]);
-				sb.append(cell.getChars()[1]);
-			}
-			sb.append('\n');
-		}
-		return sb.toString();
-	}
+    /**
+     * The entire board as a string
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Cell cell = cells[y][x];
+                sb.append(cell.getChars()[0]);
+                sb.append(cell.getChars()[1]);
+            }
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
 }

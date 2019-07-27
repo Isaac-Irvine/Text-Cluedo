@@ -11,5 +11,5 @@ public class FreeCell extends Cell {
     @Override
     public char[] getChars() {
         return new char[]{' ', ' '};
-    }
+    } // TEST ATM
 }

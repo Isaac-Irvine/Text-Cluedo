@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class Game {
 		for(int i = 0; i < nPlayers; i++) {
 			players.add(new Player());
 		}
-		board = new Board();
+		board = new Board(new File("board.txt"), 26, 27);
 
 		draw();
 	}
