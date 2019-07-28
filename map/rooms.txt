@@ -1,0 +1,98 @@
+# layout:
+#  - name: Room name
+#  - player: the postions to show the players in the order they should be filled.
+#  - door: the postions of the doors and the direction they should be entered from. [up/right/down/left]
+
+name = Kitchen
+player = 5 3
+player = 5 2
+player = 5 4
+player = 6 3
+player = 6 2
+player = 6 4
+door = 8 6 up
+
+
+name = Ball Room
+player = 7 13
+player = 7 14
+player = 7 15
+player = 8 13
+player = 8 14
+player = 8 15
+door = 7 10 right
+door = 9 11 up
+door = 9 16 up
+door = 7 17 left
+
+
+name = Conservatory
+player = 5 21
+player = 5 22
+player = 5 23
+player = 6 21
+player = 6 22
+player = 6 23
+door = 6 20 up
+
+
+name = Dining room
+player = 14 4
+player = 14 5
+player = 14 3
+player = 14 6
+player = 14 7
+player = 14 3
+door = 14 9 right
+door = 17 8 up
+
+
+name = Billiard room
+player = 13 22
+player = 13 23
+player = 13 24
+player = 13 21
+player = 13 25
+player = 12 24
+door = 11 20 left
+door = 14 24 up
+
+name = Lounge
+player = 24 3
+player = 24 4
+player = 24 5
+player = 24 6
+player = 25 3
+player = 25 4
+player = 25 5
+door = 21 8 down
+
+name = Hall
+player = 23 12
+player = 23 13
+player = 23 14
+player = 23 15
+player = 24 12
+player = 24 13
+player = 24 14
+door = 20 13 down
+door = 20 14 down
+door = 22 16 left
+
+name = Study
+player = 25 21
+player = 25 22
+player = 25 23
+player = 26 21
+player = 26 22
+player = 26 23
+door = 23 19 down
+
+name = Library
+player = 18 21
+player = 18 22
+player = 18 23
+player = 19 21
+player = 19 22
+player = 19 23
+door = 18 19 down
