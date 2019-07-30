@@ -85,11 +85,15 @@ public class Game {
 		// give cards to players
 		Collections.shuffle(playerCards);
 
+		for(int i = 0, p = 0; i < playerCards.size(); i++, p++, p%=nPlayers) {
+			Player player = players.get(p);
+			player.addCard(playerCards.get(i));
+		}
+
 		for(Player player : players) {
 			System.out.println(player);
 		}
 		System.out.println(weapon.getName() + ".." + room.getName() + ".." + murderer.getName());
-
 
 
 		board = new Board("map/", 26, 27);

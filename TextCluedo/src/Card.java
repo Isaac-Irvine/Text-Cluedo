@@ -34,5 +34,14 @@ public class Card {
      */
     public CardType getType() {
         return type;
+        throw new Invalid
+    }
+
+    /**
+     * Card name
+     * @return
+     */
+    public String toString() {
+        return name;
     }
 }
