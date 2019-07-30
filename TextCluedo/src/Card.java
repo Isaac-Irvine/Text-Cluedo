@@ -35,4 +35,12 @@ public class Card {
     public CardType getType() {
         return type;
     }
+
+    /**
+     * Card name
+     * @return
+     */
+    public String toString() {
+        return name;
+    }
 }
