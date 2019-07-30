@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,12 +33,23 @@ public class Board {
         File startingPlacesFile = new File(dir + startingPlacesFileName);
         File boardFile = new File(dir + boardFileName);
         try {
-        	Scanner roomsReader = new Scanner(roomsFile);
-            while (roomsReader.hasNext()) {
-            	roomsReader.next();
+        	Scanner roomsScanner = new Scanner(roomsFile);
+        	HashSet<Room> rooms = new HashSet<>();
+            while (roomsScanner.hasNext()) {
+            	String token = roomsScanner.next();
+            	// skip comments
+            	if (token.startsWith("#")) {
+            		roomsScanner.nextLine();
+            		continue;
+            	} else if (token.equals("name")) {
+            		roomsScanner.next(); // skipping '='
+            		Room room = new Room(roomsScanner.next()); // name
+            	} else {
+            		throw new Error("Unknown token in rooms File: " + token);
+            	}
             }
             
-            roomsReader.close();
+            roomsScanner.close();
         } catch (IOException e) {
             throw new Error(e);
         }
