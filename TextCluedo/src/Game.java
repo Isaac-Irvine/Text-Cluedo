@@ -16,7 +16,7 @@ public class Game {
 		for(int i = 0; i < nPlayers; i++) {
 			players.add(new Player());
 		}
-		board = new Board(new File("board.txt"), 26, 27);
+		board = new Board("map/", 26, 27);
 
 		draw();
 	}

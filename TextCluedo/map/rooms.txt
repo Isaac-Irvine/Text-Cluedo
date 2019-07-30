@@ -1,0 +1,98 @@
+# layout:
+#  - name: Room name
+#  - entity: the postions to show the entitys in the order they should be filled.
+#  - door: the postions of the doors and the direction they should be entered from. [up/right/down/left]
+
+name = Kitchen
+entity = 5 3
+entity = 5 2
+entity = 5 4
+entity = 6 3
+entity = 6 2
+entity = 6 4
+door = 8 6 up
+
+
+name = Ball Room
+entity = 7 13
+entity = 7 14
+entity = 7 15
+entity = 8 13
+entity = 8 14
+entity = 8 15
+door = 7 10 right
+door = 9 11 up
+door = 9 16 up
+door = 7 17 left
+
+
+name = Conservatory
+entity = 5 21
+entity = 5 22
+entity = 5 23
+entity = 6 21
+entity = 6 22
+entity = 6 23
+door = 6 20 up
+
+
+name = Dining room
+entity = 14 4
+entity = 14 5
+entity = 14 3
+entity = 14 6
+entity = 14 7
+entity = 14 3
+door = 14 9 right
+door = 17 8 up
+
+
+name = Billiard room
+entity = 13 22
+entity = 13 23
+entity = 13 24
+entity = 13 21
+entity = 13 25
+entity = 12 24
+door = 11 20 left
+door = 14 24 up
+
+name = Lounge
+entity = 24 3
+entity = 24 4
+entity = 24 5
+entity = 24 6
+entity = 25 3
+entity = 25 4
+entity = 25 5
+door = 21 8 down
+
+name = Hall
+entity = 23 12
+entity = 23 13
+entity = 23 14
+entity = 23 15
+entity = 24 12
+entity = 24 13
+entity = 24 14
+door = 20 13 down
+door = 20 14 down
+door = 22 16 left
+
+name = Study
+entity = 25 21
+entity = 25 22
+entity = 25 23
+entity = 26 21
+entity = 26 22
+entity = 26 23
+door = 23 19 down
+
+name = Library
+entity = 18 21
+entity = 18 22
+entity = 18 23
+entity = 19 21
+entity = 19 22
+entity = 19 23
+door = 18 19 down

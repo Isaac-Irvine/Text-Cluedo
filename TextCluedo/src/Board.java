@@ -4,8 +4,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Board {
+    private final String roomsFileName = "rooms.txt";
+    private final String freeSpacesFileName = "free spaces.txt";
+    private final String startingPlacesFileName = "starting places.txt";
+    private final String boardFileName = "board.txt";
+
     private final int width;
     private final int height;
     private Cell[][] cells;
@@ -16,9 +22,27 @@ public class Board {
     /**
      * Initialize the board by loading from a file.
      */
-    public Board(File file, int width, int height) {
-        this.width = width;
+    public Board(String dir, int width, int height) {
+    	this.width = width;
         this.height = height;
+        
+        // load rooms
+        File roomsFile = new File(dir + roomsFileName);
+        File freeSpacesFile = new File(dir + freeSpacesFileName);
+        File startingPlacesFile = new File(dir + startingPlacesFileName);
+        File boardFile = new File(dir + boardFileName);
+        try {
+        	Scanner roomsReader = new Scanner(roomsFile);
+            while (roomsReader.hasNext()) {
+            	roomsReader.next();
+            }
+            
+            roomsReader.close();
+        } catch (IOException e) {
+            throw new Error(e);
+        }
+        
+        /*
 
         char[][] walls = new char[height][width]; // 1 char per cell, represents if a wall or a free cell or a room.
         char[][][] boardString = new char[height][width][2]; // 2 chars per cell
@@ -72,6 +96,7 @@ public class Board {
                 cells[y][x] = cell;
             }
         }
+        */
     }
 
 

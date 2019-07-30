@@ -1,15 +1,5 @@
 public class FreeCell extends Cell {
-    public FreeCell(int x, int y) {
-        super(x, y);
+    public FreeCell(int x, int y, char[] chars, boolean free) {
+        super(x, y, chars, free);
     }
-
-    @Override
-    public boolean isFree() {
-        return true;
-    }
-
-    @Override
-    public char[] getChars() {
-        return new char[]{' ', ' '};
-    } // TEST ATM
 }
