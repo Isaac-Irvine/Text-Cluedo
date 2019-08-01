@@ -30,6 +30,7 @@ public class Game {
 	 * @param nPlayers
 	 */
 	public Game(int nPlayers) {
+
 		if(nPlayers > allSuspects.length || nPlayers < 3)
 			throw new IllegalArgumentException("Invalid number of players.");
 
@@ -74,16 +75,26 @@ public class Game {
 		for (int p = 1; p <= nPlayers; p++) {
 			System.out.print("Player " + p + ", please pick your character\n[");
 			for (int i = 0; i < charactersLeft.size(); i++) {
-				System.out.print(charactersLeft.get(i));
+				System.out.print(i + ": " + charactersLeft.get(i));
 				if(i != charactersLeft.size()-1) System.out.print(", ");
 			}
 			System.out.print("]: ");
 
 			//get the picked option
-			String picked = scan.nextLine().toLowerCase();
-			while(!suspectAliases.containsKey(picked)) {
-				System.out.print("Sorry, that is not one of the characters you can pick. Enter again: ");
+			String picked;
+			while (true) {
 				picked = scan.nextLine().toLowerCase();
+				if (suspectAliases.containsKey(picked)) {
+					break;
+				}
+				try {
+					int num = Integer.parseInt(picked);
+					if (num >= 0 && num < charactersLeft.size()) {
+						picked = charactersLeft.get(num);
+						break;
+					}
+				} catch (NumberFormatException e) {}
+				System.out.print("Sorry, that is not one of the characters you can pick. Enter again: ");
 			}
 
 			String name = allSuspects[suspectAliases.get(picked.toLowerCase())];

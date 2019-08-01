@@ -30,24 +30,40 @@ public class Board {
         File startingPlacesFile = new File(dir + startingPlacesFileName);
         File boardFile = new File(dir + boardFileName);
 
+        // make lists
+        allRooms = new ArrayList<>();
+        allWeapons = new ArrayList<>();
+        allSuspects = new ArrayList<>();
 
         // creates all cells
-
         cells = new Cell[height][width];
 
-        // FIXME: Remove this test part.
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                cells[y][x] = new FreeCell(x, y);
+        // read the board and assume all the cells are wall. Cells that are not walls will be changed latter.
+        try {
+            BufferedReader boardReader = new BufferedReader(new FileReader(boardFile));
+
+            String line;
+
+            // process the board string
+            for (int y = 0; y < height; y++) {
+                // skip lines that are comments
+                {
+                    line = boardReader.readLine();
+                } while (line.startsWith("#"));
+
+                for (int x = 0; x < width; x++) {
+                    char[] chars = {line.charAt(x * 2), line.charAt(x * 2 + 1)};
+                    cells[y][x] = new WallCell(x, y, chars);
+                }
             }
+        } catch (IOException e) {
+            throw new Error(e);
         }
 
-
+        // load all the rooms
         try {
-            // #1 load all rooms
-
             Scanner roomsScanner = new Scanner(roomsFile);
-            HashSet<Room> rooms = new HashSet<>();
+            Room room = null;
             while (roomsScanner.hasNext()) {
                 String token = roomsScanner.next();
                 // skip comments
@@ -56,7 +72,41 @@ public class Board {
                     continue;
                 } else if (token.equals("name")) {
                     roomsScanner.next(); // skipping '='
-                    Room room = new Room(roomsScanner.next()); // name
+                    room = new Room(roomsScanner.nextLine()); // name
+                    allRooms.add(room);
+                } else if (room == null) {
+                    throw new Error("You must give a name for the room before anything else");
+                } else if (token.equals("entity")) {
+                    roomsScanner.next(); // skipping '='
+                    // get the cell from the board and replace it with a room entity cell.
+                    int x = roomsScanner.nextInt() - 1;
+                    int y = roomsScanner.nextInt() - 1;
+                    Cell oldCell = cells[y][x];
+                    RoomEntityCell newCell = new RoomEntityCell(x, y, oldCell.getChars());
+                    room.addEntityCell(newCell);
+                    cells[y][x] = newCell;
+                } else if (token.equals("door")) {
+                    roomsScanner.next(); // skipping '='
+                    // get the old cell and replace it with a Room Entity cell
+                    int x = roomsScanner.nextInt() - 1;
+                    int y = roomsScanner.nextInt() - 1;
+                    String directionAsString = roomsScanner.next();
+                    Cell.Direction direction;
+                    if (directionAsString.equals("up")) {
+                        direction = Cell.Direction.UP;
+                    } else if (directionAsString.equals("down")) {
+                        direction = Cell.Direction.DOWN;
+                    } else if (directionAsString.equals("left")) {
+                        direction = Cell.Direction.LEFT;
+                    } else if (directionAsString.equals("right")) {
+                        direction = Cell.Direction.RIGHT;
+                    } else {
+                        throw new Error("Unknown direction in room file: " + directionAsString);
+                    }
+                    Cell oldCell = cells[y][x];
+                    RoomEntranceCell newCell = new RoomEntranceCell(x, y, oldCell.getChars(), direction);
+                    room.addEntranceCell(newCell);
+                    cells[y][x] = newCell;
                 } else {
                     throw new Error("Unknown token in rooms File: " + token);
                 }
@@ -75,66 +125,40 @@ public class Board {
         } catch (IOException e) {
             throw new Error(e);
         }
-        
 
-
-        /*
-
-        char[][] walls = new char[height][width]; // 1 char per cell, represents if a wall or a free cell or a room.
-        char[][][] boardString = new char[height][width][2]; // 2 chars per cell
+        // Read all the free spaces and replace all the walls that should be free spaces with free spaces.
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            Scanner freeSpaceScanner = new Scanner(freeSpacesFile);
+            int x = 0;
+            int y = 0;
+            while (freeSpaceScanner.hasNext()) {
+                String token = freeSpaceScanner.next();
+                // skip comments
+                if (token.startsWith("#")) {
+                    freeSpaceScanner.nextLine();
+                    continue;
+                } else if (token.equals(".")) {
+                    cells[y][x] = new FreeCell(x, y);
+                } else if (!token.equals("X")) {
+                    throw new Error("Got unknown token in Free space file");
+                }
 
-            String line;
-
-            // process the board string
-            for (int y = 0; y < height; y++) {
-                line = reader.readLine();
-                for (int x = 0; x < width; x++) {
-                    boardString[y][x][0] = line.charAt(x * 2);
-                    boardString[y][x][1] = line.charAt(x * 2 + 1);
+                x++;
+                if (x >= width) {
+                    y++;
+                    x = 0;
                 }
             }
-
-            // process the walls/floor
-            for (int y = 0; y < height; y++) {
-                line = reader.readLine();
-                for (int x = 0; x < width; x++) {
-                    walls[y][x] = line.charAt(x);
-                }
-            }
-            reader.close();
+            freeSpaceScanner.close();
 
         } catch (IOException e) {
             throw new Error(e);
         }
 
-        // create all the cells
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                // get cell type at this position
-                char cellType = walls[y][x];
-
-                // create cell object
-                Cell cell;
-
-                switch (cellType) {
-                    case 'X':
-                    case '#':
-                        cell = new WallCell(x, y, new char[]{boardString[y][x][0], boardString[y][x][1]});
-                        break;
-                    default:
-                        cell = new FreeCell(x, y);
-                }
-
-                cells[y][x] = cell;
-            }
-        }
-        */
     }
 
     /**
-     * Get a set of all the avaliable directions coming from this cell
+     * Get a set of all the available directions coming from this cell
      *
      * @param cell
      * @return
