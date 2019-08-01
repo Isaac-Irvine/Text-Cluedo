@@ -10,7 +10,7 @@ class Cell
 {
   int y;
   int x;
-  1 -- 0..1 Item item;
+  1 -- 0..1 Entity item;
 public Boolean isFree(){
 
 }
@@ -54,12 +54,12 @@ class Player
 
 class Suspect
 {
-  isA Item;
+  isA Entity;
   }
 
 class Weapon
 {
-  isA Item;
+  isA Entity;
   }
 
 class Room
@@ -74,7 +74,7 @@ class Card
   type;
 }
 
-class Item
+class Entity
 {
   1 -- 1 Card;
   }
@@ -97,8 +97,8 @@ class Cell
 {
   position 91 232 181 129;
   position.association Cell__Suspect 109,23 0,23;
-  position.association Cell__Item 109,18 0,41;
-  position.association Cell__Item 181,40 0,38;
+  position.association Cell__Entity 109,18 0,41;
+  position.association Cell__Entity 181,40 0,38;
 }
 
 class RoomEntranceCell
@@ -124,7 +124,7 @@ class Game
   position.association Game__Room 20,41 103,0;
   position.association Game__Player 109,23 0,7;
   position.association Game__Player:players 142,20 0,10;
-    position.association Game__Item 142,87 0,20;
+    position.association Game__Entity 142,87 0,20;
 }
 
 class Player
@@ -156,14 +156,14 @@ class Card
 {
   position 876 23 112 58;
   position.association Card__Player 7,0 62,41;
-    position.association Card__Item 65,41 48,0;
+    position.association Card__Entity 65,41 48,0;
 }
 
-class Item
+class Entity
 {
-  position 811 176 112 41;
-  position.association Card__Item 79,0 27,95;
-  }//$?[End_of_model]$?
+  position 811 176 109 41;
+  position.association Card__Entity 75,0 29,75;
+  }
 
 class WallCell
 {

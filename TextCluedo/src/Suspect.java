@@ -1,2 +1,2 @@
-public class Suspect extends Item {
+public class Suspect extends Entity {
 }

@@ -1,8 +1,8 @@
-# X Y initials name
+# X Y initials
 
-2 11 MW Mrs. White
-2 16 RG Rev. Green
-19 2 CM Colonel Mustard
-26 9 MS Miss Scarlett
-21 25 PP Professor Plum
-8 25 MP Mrs. Peacock
+2 11 MW
+2 16 MG
+19 2 CM
+26 9 MS
+21 25 PP
+8 25 MP

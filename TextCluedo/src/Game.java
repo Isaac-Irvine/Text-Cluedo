@@ -12,6 +12,16 @@ public class Game {
 	private static final String[] allRooms = new String[]
 			{"Kitchen", "Ball Room", "Conservatory", "Billiard Room", "Library", "Study", "Hall", "Lounge"};
 
+	// easy way to look up the index of a suspect in the array. Contains some aliases
+	private static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{
+		put("miss scarlett", 0); put("scarlett", 0); put("ms", 0);
+		put("col mustard", 1); put("col. mustard", 1); put("mustard", 1); put("cm", 1);
+		put("mrs. white", 2); put("mrs white", 2); put("white", 2); put("mw", 2);
+		put("mr. green", 3); put("mr green", 3); put("green", 3); put("mg", 3);
+		put("mrs. peacock", 4); put("mrs peacock", 4); put("peacock", 4); put("mp", 4);
+		put("prof. plum", 5); put("prof plum", 5); put("plum", 5); put("pp", 5);
+	}};
+
 	private Card murderer, weapon, room;
 
 	/**
@@ -70,15 +80,17 @@ public class Game {
 			System.out.print("]: ");
 
 			//get the picked option
-			String picked = scan.nextLine();
-			while(!charactersLeft.contains(picked)) {
+			String picked = scan.nextLine().toLowerCase();
+			while(!suspectAliases.containsKey(picked)) {
 				System.out.print("Sorry, that is not one of the characters you can pick. Enter again: ");
-				picked = scan.nextLine();
+				picked = scan.nextLine().toLowerCase();
 			}
 
+			String name = allSuspects[suspectAliases.get(picked.toLowerCase())];
+
 			// add the player
-			Player player = new Player(p, picked);
-			charactersLeft.remove(picked);
+			Player player = new Player(p, name);
+			charactersLeft.remove(name);
 			players.add(player);
 		}
 
@@ -90,6 +102,9 @@ public class Game {
 			player.addCard(playerCards.get(i));
 		}
 
+
+
+		// test print
 		for(Player player : players) {
 			System.out.println(player);
 		}

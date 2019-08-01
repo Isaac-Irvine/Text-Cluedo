@@ -1,5 +1,9 @@
 public class RoomEntranceCell extends Cell{
-    public RoomEntranceCell(int x, int y, char[] chars, boolean free) {
-        super(x, y, chars, free);
+    private Cell.Direction direction;
+
+
+    public RoomEntranceCell(int x, int y, char[] chars, Cell.Direction direction) {
+        super(x, y, chars, true);
+        this.direction = direction;
     }
 }

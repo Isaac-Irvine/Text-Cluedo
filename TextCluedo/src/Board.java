@@ -2,16 +2,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Board {
-    private final String roomsFileName = "rooms.txt";
-    private final String freeSpacesFileName = "free spaces.txt";
-    private final String startingPlacesFileName = "starting places.txt";
-    private final String boardFileName = "board.txt";
+    private static final String roomsFileName = "rooms.txt";
+    private static final String freeSpacesFileName = "free spaces.txt";
+    private static final String startingPlacesFileName = "starting places.txt";
+    private static final String boardFileName = "board.txt";
 
     private final int width;
     private final int height;
@@ -24,42 +21,67 @@ public class Board {
      * Initialize the board by loading from a file.
      */
     public Board(String dir, int width, int height) {
-    	this.width = width;
+        this.width = width;
         this.height = height;
-        
+
         // load rooms
         File roomsFile = new File(dir + roomsFileName);
         File freeSpacesFile = new File(dir + freeSpacesFileName);
         File startingPlacesFile = new File(dir + startingPlacesFileName);
         File boardFile = new File(dir + boardFileName);
-        try {
-        	Scanner roomsScanner = new Scanner(roomsFile);
-        	HashSet<Room> rooms = new HashSet<>();
-            while (roomsScanner.hasNext()) {
-            	String token = roomsScanner.next();
-            	// skip comments
-            	if (token.startsWith("#")) {
-            		roomsScanner.nextLine();
-            		continue;
-            	} else if (token.equals("name")) {
-            		roomsScanner.next(); // skipping '='
-            		Room room = new Room(roomsScanner.next()); // name
-            	} else {
-            		throw new Error("Unknown token in rooms File: " + token);
-            	}
+
+
+        // creates all cells
+
+        cells = new Cell[height][width];
+
+        // FIXME: Remove this test part.
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                cells[y][x] = new FreeCell(x, y);
             }
-            
+        }
+
+
+        try {
+            // #1 load all rooms
+
+            Scanner roomsScanner = new Scanner(roomsFile);
+            HashSet<Room> rooms = new HashSet<>();
+            while (roomsScanner.hasNext()) {
+                String token = roomsScanner.next();
+                // skip comments
+                if (token.startsWith("#")) {
+                    roomsScanner.nextLine();
+                    continue;
+                } else if (token.equals("name")) {
+                    roomsScanner.next(); // skipping '='
+                    Room room = new Room(roomsScanner.next()); // name
+                } else {
+                    throw new Error("Unknown token in rooms File: " + token);
+                }
+            }
+
             roomsScanner.close();
+
+
+            // #2 load board.txt into an array (I've done this before commented out)
+
+            // #3 create the cell remaining cell objects (that aren't Room objects) using free spaces.txt
+
+            // #4 create all the suspect objects and load them into the correct cells using setEntity
+
+            // #5 create all the weapon objects and add them to rooms randomly as per the brief.
         } catch (IOException e) {
             throw new Error(e);
         }
         
+
+
         /*
 
         char[][] walls = new char[height][width]; // 1 char per cell, represents if a wall or a free cell or a room.
         char[][][] boardString = new char[height][width][2]; // 2 chars per cell
-        cells = new Cell[height][width];
-
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
 
@@ -109,6 +131,55 @@ public class Board {
             }
         }
         */
+    }
+
+    /**
+     * Get a set of all the avaliable directions coming from this cell
+     *
+     * @param cell
+     * @return
+     */
+    public Set<Cell.Direction> getAvaliableNeighbours(Cell cell) {
+        Set<Cell.Direction> directions = new HashSet<>();
+
+        for (Cell.Direction d : Cell.Direction.values()) {
+            Cell neighbour = getNeighbourCell(cell, d);
+            if (neighbour == null) continue;
+            if (neighbour.isFree()) directions.add(d);
+        }
+
+        return directions;
+    }
+
+
+    /**
+     * Get the cell in the given direction
+     * Null if there is no cell in that direction
+     *
+     * @param direction
+     * @return
+     */
+    public Cell getNeighbourCell(Cell cell, Cell.Direction direction) {
+        int x = cell.getX();
+        int y = cell.getY();
+
+        switch (direction) {
+            case LEFT:
+                x--;
+                break;
+            case RIGHT:
+                x++;
+                break;
+            case UP:
+                y--;
+                break;
+            case DOWN:
+                y++;
+                break;
+        }
+
+        if (x < 0 || x >= width || y < 0 || y >= height) return null;
+        else return cells[y][x];
     }
 
 
