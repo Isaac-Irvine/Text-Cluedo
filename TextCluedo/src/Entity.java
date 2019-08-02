@@ -25,6 +25,7 @@ public abstract class Entity {
     public void moveTo(Cell cell) {
         location.removeEntity();
         cell.setEntity(this);
+        this.location = cell;
     }
 
     /**

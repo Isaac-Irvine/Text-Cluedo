@@ -78,7 +78,7 @@ public class Game {
 
 		// add all players
 		for (int p = 1; p <= nPlayers; p++) {
-			System.out.print("Player " + p + ", please pick your character\n[");
+			System.out.print("\nPlayer " + p + ", please pick your character\n[");
 			for (int i = 0; i < charactersLeft.size(); i++) {
 				System.out.print(i + ": " + charactersLeft.get(i));
 				if (i != charactersLeft.size() - 1) System.out.print(", ");
@@ -106,7 +106,7 @@ public class Game {
 			int index = suspectAliases.get(picked.toLowerCase());
 
 			// add the player
-			Player player = new Player(this, p, board.getSuspect(index));
+			Player player = new Player(this, scan, p, board.getSuspect(index));
 			charactersLeft.remove(allSuspects[index]);
 			players.add(player);
 		}
@@ -143,6 +143,6 @@ public class Game {
 	 * Draw the board
 	 */
 	public void draw() {
-		System.out.print(board.toString());
+		System.out.print("\n" + board.toString());
 	}
 }
