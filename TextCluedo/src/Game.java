@@ -4,6 +4,7 @@ import java.util.*;
 public class Game {
 	private Board board;
 	private List<Player> players;
+	private int currentTurn;
 
 	public static final String[] allSuspects = new String[]
 			{"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
@@ -17,7 +18,7 @@ public class Game {
 		put("miss scarlett", 0); put("scarlett", 0); put("ms", 0);
 		put("col mustard", 1); put("col. mustard", 1); put("mustard", 1); put("cm", 1);
 		put("mrs. white", 2); put("mrs white", 2); put("white", 2); put("mw", 2);
-		put("mr. green", 3); put("mr green", 3); put("green", 3); put("mg", 3);
+		put("mr. green", 3);put("mr green", 3);put("green", 3);put("mg", 3);
 		put("mrs. peacock", 4); put("mrs peacock", 4); put("peacock", 4); put("mp", 4);
 		put("prof. plum", 5); put("prof plum", 5); put("plum", 5); put("pp", 5);
 	}};
@@ -30,9 +31,13 @@ public class Game {
 	 * @param nPlayers
 	 */
 	public Game(int nPlayers) {
-
-		if(nPlayers > allSuspects.length || nPlayers < 3)
+		if (nPlayers > allSuspects.length || nPlayers < 3)
 			throw new IllegalArgumentException("Invalid number of players.");
+
+
+		// create the board
+		board = new Board("map/", 26, 27);
+		currentTurn = 0;
 
 		players = new ArrayList<>();
 		List<Card> playerCards = new ArrayList<>();
@@ -76,7 +81,7 @@ public class Game {
 			System.out.print("Player " + p + ", please pick your character\n[");
 			for (int i = 0; i < charactersLeft.size(); i++) {
 				System.out.print(i + ": " + charactersLeft.get(i));
-				if(i != charactersLeft.size()-1) System.out.print(", ");
+				if (i != charactersLeft.size() - 1) System.out.print(", ");
 			}
 			System.out.print("]: ");
 
@@ -93,38 +98,45 @@ public class Game {
 						picked = charactersLeft.get(num);
 						break;
 					}
-				} catch (NumberFormatException e) {}
+				} catch (NumberFormatException e) {
+				}
 				System.out.print("Sorry, that is not one of the characters you can pick. Enter again: ");
 			}
 
-			String name = allSuspects[suspectAliases.get(picked.toLowerCase())];
+			int index = suspectAliases.get(picked.toLowerCase());
 
 			// add the player
-			Player player = new Player(p, name);
-			charactersLeft.remove(name);
+			Player player = new Player(this, p, board.getSuspect(index));
+			charactersLeft.remove(allSuspects[index]);
 			players.add(player);
 		}
 
 		// give cards to players
 		Collections.shuffle(playerCards);
 
-		for(int i = 0, p = 0; i < playerCards.size(); i++, p++, p%=nPlayers) {
+		for (int i = 0, p = 0; i < playerCards.size(); i++, p++, p %= nPlayers) {
 			Player player = players.get(p);
 			player.addCard(playerCards.get(i));
 		}
 
+		run();
+	}
 
+	/**
+	 * Run the game
+	 */
+	public void run() {
+		for(int i = 0; i < 6; i++) { // TODO implement proper game loop
+			draw();
+			Player player = players.get(currentTurn);
 
-		// test print
-		for(Player player : players) {
 			System.out.println(player);
+
+			player.turn();
+
+			currentTurn++;
+			currentTurn %= players.size();
 		}
-		System.out.println(weapon.getName() + ".." + room.getName() + ".." + murderer.getName());
-
-
-		board = new Board("map/", 26, 27);
-
-		draw();
 	}
 
 	/**

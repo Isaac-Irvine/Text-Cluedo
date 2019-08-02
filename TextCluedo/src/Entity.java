@@ -13,8 +13,6 @@ public abstract class Entity {
         this.location = location;
         this.board = board;
         this.chars = chars;
-        
-        System.out.println(location.getClass().getName());
 
         // add the entity to the location
         location.setEntity(this);
@@ -25,7 +23,7 @@ public abstract class Entity {
      * @cell the cell to move to
      */
     public void moveTo(Cell cell) {
-        location.setEntity(null);
+        location.removeEntity();
         cell.setEntity(this);
     }
 

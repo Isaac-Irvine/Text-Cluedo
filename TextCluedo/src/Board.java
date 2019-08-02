@@ -185,14 +185,16 @@ public class Board {
      * Get a set of all the available directions coming from this cell
      *
      * @param cell
+	 * @param exceptions Cells that are not allowed to be visited
      * @return
      */
-    public Set<Cell.Direction> getAvaliableNeighbours(Cell cell) {
+    public Set<Cell.Direction> getAvaliableNeighbours(Cell cell, Set<Cell> exceptions) {
         Set<Cell.Direction> directions = new HashSet<>();
 
         for (Cell.Direction d : Cell.Direction.values()) {
             Cell neighbour = getNeighbourCell(cell, d);
             if (neighbour == null) continue;
+            if (exceptions.contains(neighbour)) continue;
             if (neighbour.isFree()) directions.add(d);
         }
 
@@ -256,5 +258,14 @@ public class Board {
             sb.append('\n');
         }
         return sb.toString();
+    }
+
+    /**
+     * Get a suspect at an index
+     * @param index
+     * @return
+     */
+    public Suspect getSuspect(int index) {
+        return allSuspects.get(index);
     }
 }

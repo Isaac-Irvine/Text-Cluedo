@@ -33,11 +33,11 @@ public class Suspect extends Entity {
 	/**
 	 * Get a set of available directions coming from the suspect.
 	 */
-	public Set<Cell.Direction> getAvaliableDirections() {
+	public Set<Cell.Direction> getAvaliableDirections(Set<Cell> visited) {
 		if( currentRoom != null) { // no avaliable directions if you are in a room
 			return new HashSet<>();
 		}
-		return getBoard().getAvaliableNeighbours(getLocation());
+		return getBoard().getAvaliableNeighbours(getLocation(), visited);
 	}
 
 	/**

@@ -1,7 +1,28 @@
 public abstract class Cell {
     public enum Direction {
-        UP, DOWN, LEFT, RIGHT
-    }
+        UP, DOWN, LEFT, RIGHT;
+
+        /**
+         * Get a direction from a string
+         * @param direction
+         * @return
+         */
+		public static Direction getDirection(String direction) {
+		    if(direction.equalsIgnoreCase("up") || direction.equalsIgnoreCase("u")) {
+		        return Direction.UP;
+            }
+		    else if(direction.equalsIgnoreCase("down") || direction.equalsIgnoreCase("d")) {
+		        return Direction.DOWN;
+            }
+		    else if(direction.equalsIgnoreCase("left") || direction.equalsIgnoreCase("l")) {
+		        return Direction.LEFT;
+            }
+		    else if(direction.equalsIgnoreCase("right") || direction.equalsIgnoreCase("r")) {
+		        return Direction.RIGHT;
+            }
+		    else return null;
+		}
+	}
 
 
     private final int x;
@@ -45,7 +66,14 @@ public abstract class Cell {
         this.entity = entity;
     }
 
-    /**
+	/**
+	 * Remove the entity at this cell
+	 */
+	public void removeEntity() {
+		this.entity = null;
+	}
+
+	/**
      * If you can walk to this cell
      *
      * @return
