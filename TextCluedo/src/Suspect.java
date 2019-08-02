@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Suspect extends Entity {
@@ -14,12 +17,61 @@ public class Suspect extends Entity {
 	 */
 	public Suspect(Board board, int x, int y, char[] chars) {
 		super(board, board.getCell(x, y), chars);
+
+		currentRoom = null;
 	}
 
 	/**
-	 * Get a set of avaliable directions coming from the suspect.
+	 * The room you are currently in.
+	 * Could be null.
+	 * @return
+	 */
+	public Room getCurrentRoom() {
+		return currentRoom;
+	}
+
+	/**
+	 * Get a set of available directions coming from the suspect.
 	 */
 	public Set<Cell.Direction> getAvaliableDirections() {
+		if( currentRoom != null) { // no avaliable directions if you are in a room
+			return new HashSet<>();
+		}
 		return getBoard().getAvaliableNeighbours(getLocation());
+	}
+
+	/**
+	 * Get a list of all the room exits
+	 */
+	public List<RoomEntranceCell> getExits() {
+		if(currentRoom == null) {
+			return new ArrayList<>(); // no exits because not in a room
+		}
+
+		return currentRoom.getRoomEntrances();
+	}
+
+	/**
+	 * Move the suspect in a direction
+	 */
+	public void move(Cell.Direction direction) {
+		Cell neighbour = getBoard().getNeighbourCell(getLocation(), direction);
+
+		// check that the neighbour is a room.
+		if(neighbour instanceof RoomEntranceCell) {
+			// TODO enter room - but check that the direction is correct
+		}
+
+		else {
+			moveTo(neighbour);
+		}
+	}
+
+	/**
+	 * Exit a room
+	 */
+	public void exitRoom(RoomEntranceCell exit) {
+		Cell neighbour = getBoard().getNeighbourCell(exit, exit.getDirection());
+		moveTo(neighbour);
 	}
 }

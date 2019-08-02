@@ -12,6 +12,15 @@ public class Room {
         roomEntrances = new ArrayList<>();
     }
 
+
+    /**
+     * List of all the room entrances
+     * @return
+     */
+    public List<RoomEntranceCell> getRoomEntrances() {
+        return roomEntrances;
+    }
+
     /**
      * Returns the first free room entity cell.
      * @return
