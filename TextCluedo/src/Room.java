@@ -16,7 +16,12 @@ public class Room {
      * Returns the first free room entity cell.
      * @return
      */
-    public Cell getFreeCell() {
+    public Cell getAvailableCell() {
+        for (RoomEntityCell cell : roomCells) {
+        	if (cell.getEntity() == null) {
+        		return cell;
+        	}
+        }
         return null;
     }
 

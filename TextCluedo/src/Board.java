@@ -154,6 +154,30 @@ public class Board {
         } catch (IOException e) {
             throw new Error(e);
         }
+        
+        // read all the suspects and place them onto the board
+        try {
+            Scanner startingPlacesScanner = new Scanner(startingPlacesFile);
+            while (startingPlacesScanner.hasNext()) {
+                String token = startingPlacesScanner.next();
+                // skip comments
+                if (token.startsWith("#")) {
+                	startingPlacesScanner.nextLine();
+                    continue;
+                }
+                
+                int x = Integer.parseInt(token);
+                int y = startingPlacesScanner.nextInt();
+                String initials = startingPlacesScanner.next();
+                char[] chars = {initials.charAt(0), initials.charAt(1)};
+                Suspect suspect = new Suspect(this, x, y, chars);
+                allSuspects.add(suspect);
+            }
+            startingPlacesScanner.close();
+
+        } catch (IOException e) {
+            throw new Error(e);
+        }
 
     }
 
