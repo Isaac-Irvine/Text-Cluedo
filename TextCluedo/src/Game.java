@@ -5,15 +5,15 @@ public class Game {
 	private Board board;
 	private List<Player> players;
 
-	private static final String[] allSuspects = new String[]
+	public static final String[] allSuspects = new String[]
 			{"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
-	private static final String[] allWeapons = new String[]
+	public static final String[] allWeapons = new String[]
 			{"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
-	private static final String[] allRooms = new String[]
+	public static final String[] allRooms = new String[]
 			{"Kitchen", "Ball Room", "Conservatory", "Billiard Room", "Library", "Study", "Hall", "Lounge"};
 
 	// easy way to look up the index of a suspect in the array. Contains some aliases
-	private static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{
+	public static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{
 		put("miss scarlett", 0); put("scarlett", 0); put("ms", 0);
 		put("col mustard", 1); put("col. mustard", 1); put("mustard", 1); put("cm", 1);
 		put("mrs. white", 2); put("mrs white", 2); put("white", 2); put("mw", 2);

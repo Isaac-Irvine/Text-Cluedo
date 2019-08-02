@@ -12,7 +12,10 @@ public class Room {
         roomEntrances = new ArrayList<>();
     }
 
-
+    /**
+     * Returns the first free room entity cell.
+     * @return
+     */
     public Cell getFreeCell() {
         return null;
     }

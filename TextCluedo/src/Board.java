@@ -206,6 +206,14 @@ public class Board {
         else return cells[y][x];
     }
 
+    /**
+     * Get the cell at a position
+     */
+    public Cell getCell(int x, int y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) throw new IllegalArgumentException("Invalid position on the board.");
+        return cells[y][x];
+    }
+
 
     /**
      * The entire board as a string
