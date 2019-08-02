@@ -41,7 +41,7 @@ public abstract class Cell {
      * Set the entity at this cell
      */
     public void setEntity(Entity entity) {
-        if (!isFree() || entity != null) throw new IllegalStateException("Cannot move an entity into an occupied cell.");
+        if (!isFree() || this.entity != null) throw new IllegalStateException("Cannot move an entity into an occupied cell.");
         this.entity = entity;
     }
 
