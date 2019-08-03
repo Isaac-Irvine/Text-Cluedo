@@ -125,7 +125,7 @@ public class Player {
             game.draw();
 
             // regular move through free spaces
-            if(suspect.getCurrentRoom() == null) {
+            if (suspect.getCurrentRoom() == null) {
                 // get available directions
                 Set<Cell.Direction> directions = suspect.getAvaliableDirections(visited);
 
@@ -151,14 +151,50 @@ public class Player {
                 suspect.move(direction);
 
                 // stop moving if you reach a room
-                if(suspect.getCurrentRoom() != null) {
+                if (suspect.getCurrentRoom() != null) {
                     break;
                 }
             }
             // exit a room
             else {
-                System.out.println("Yeah I haven't implemented the ability to leave a room..");
-                break;
+                List<RoomEntranceCell> cellList = suspect.getAvaliableRoomExits();
+
+                if (cellList.size() == 0) {
+                    System.out.println("You are unable to exit the room as all exits are blocked.");
+                    break;
+                }
+
+                // get the list of options to pick as a string
+                List<String> options = new ArrayList<>();
+
+                Cell.Direction previousDir = null;
+                int doorCount = 0;
+
+                for (RoomEntranceCell cell : cellList) {
+                    // multiple doors with the same direction - add a number to the end
+                    if (previousDir == cell.getDirection()) {
+                        doorCount++;
+                        options.add(options.size() + ": " + cell.getDirection() + " DOOR " + doorCount);
+                    } else {
+                        doorCount = 1;
+                        previousDir = cell.getDirection();
+                        options.add(options.size() + ": " + cell.getDirection() + " DOOR");
+                    }
+
+                }
+                System.out.println("Moves left: " + nSteps);
+
+                System.out.println("\nAvailable Exits: " + options);
+                System.out.print("Enter the number corresponding to the door you want to exit: ");
+
+                // get choice
+                int choice = getNumberInput(0, cellList.size());
+
+                // move
+                RoomEntranceCell exit = cellList.get(choice);
+
+                visited.add(exit);
+                suspect.exitRoom(exit);
             }
 
             nSteps--;
@@ -176,6 +212,28 @@ public class Player {
      */
     public boolean hasCard(Card card) {
         return cards.contains(card);
+    }
+
+    /**
+     * Get a number input
+     * @return
+     */
+    private int getNumberInput(int min, int max) {
+        String line = scanner.nextLine();
+
+        try {
+            int choice = Integer.parseInt(line);
+            if (choice < min || choice >= max) {
+                System.out.print("Invalid option, Enter again: ");
+                return getNumberInput(min, max);
+            }
+
+            return choice;
+        }catch(NumberFormatException e) {
+            System.out.print("Invalid option, Enter again: ");
+            return getNumberInput(min, max);
+
+        }
     }
 
 

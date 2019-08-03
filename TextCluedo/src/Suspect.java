@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Suspect extends Entity {
 	private Room currentRoom;
@@ -41,14 +38,23 @@ public class Suspect extends Entity {
 	}
 
 	/**
-	 * Get a list of all the room exits
+	 * Get a list of available room exits
+	 * (Not blocked by players)
 	 */
-	public List<RoomEntranceCell> getExits() {
-		if(currentRoom == null) {
-			return new ArrayList<>(); // no exits because not in a room
+	public List<RoomEntranceCell> getAvaliableRoomExits() {
+		if( currentRoom == null) { // not in room
+			return new ArrayList<>();
 		}
 
-		return currentRoom.getRoomEntrances();
+
+		List<RoomEntranceCell> cells = new ArrayList<>();
+
+		for(RoomEntranceCell cell : currentRoom.getRoomEntrances()) {
+			Cell exit = getBoard().getNeighbourCell(cell, cell.getDirection());
+			if(exit.isFree()) cells.add(cell); // check the exit isn't blocked
+		}
+
+		return cells;
 	}
 
 	/**
@@ -80,5 +86,6 @@ public class Suspect extends Entity {
 	public void exitRoom(RoomEntranceCell exit) {
 		Cell neighbour = getBoard().getNeighbourCell(exit, exit.getDirection());
 		moveTo(neighbour);
+		currentRoom = null;
 	}
 }

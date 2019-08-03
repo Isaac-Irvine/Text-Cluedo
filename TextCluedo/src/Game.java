@@ -126,7 +126,7 @@ public class Game {
 	 * Run the game
 	 */
 	public void run() {
-		for(int i = 0; i < 6; i++) { // TODO implement proper game loop
+		for(int i = 0; i < 10; i++) { // TODO implement proper game loop
 			draw();
 			Player player = players.get(currentTurn);
 
