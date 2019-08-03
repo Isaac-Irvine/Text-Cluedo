@@ -49,7 +49,8 @@ public class Board {
                 // skip lines that are comments
                 {
                     line = boardReader.readLine();
-                } while (line.startsWith("#"));
+                }
+                while (line.startsWith("#")) ;
 
                 for (int x = 0; x < width; x++) {
                     char[] chars = {line.charAt(x * 2), line.charAt(x * 2 + 1)};
@@ -79,17 +80,17 @@ public class Board {
                 } else if (token.equals("entity")) {
                     roomsScanner.next(); // skipping '='
                     // get the cell from the board and replace it with a room entity cell.
-                    int x = roomsScanner.nextInt() - 1;
-                    int y = roomsScanner.nextInt() - 1;
+                    int x = roomsScanner.nextInt();
+                    int y = roomsScanner.nextInt();
                     Cell oldCell = cells[y][x];
-                    RoomEntityCell newCell = new RoomEntityCell(x, y, oldCell.getChars());
+                    RoomEntityCell newCell = new RoomEntityCell(room, x, y, oldCell.getChars());
                     room.addEntityCell(newCell);
                     cells[y][x] = newCell;
                 } else if (token.equals("door")) {
                     roomsScanner.next(); // skipping '='
                     // get the old cell and replace it with a Room Entity cell
-                    int x = roomsScanner.nextInt() - 1;
-                    int y = roomsScanner.nextInt() - 1;
+                    int x = roomsScanner.nextInt();
+                    int y = roomsScanner.nextInt();
                     String directionAsString = roomsScanner.next();
                     Cell.Direction direction;
                     if (directionAsString.equals("up")) {
@@ -104,7 +105,7 @@ public class Board {
                         throw new Error("Unknown direction in room file: " + directionAsString);
                     }
                     Cell oldCell = cells[y][x];
-                    RoomEntranceCell newCell = new RoomEntranceCell(x, y, oldCell.getChars(), direction);
+                    RoomEntranceCell newCell = new RoomEntranceCell(room, x, y, oldCell.getChars(), direction);
                     room.addEntranceCell(newCell);
                     cells[y][x] = newCell;
                 } else {
@@ -114,14 +115,6 @@ public class Board {
 
             roomsScanner.close();
 
-
-            // #2 load board.txt into an array (I've done this before commented out)
-
-            // #3 create the cell remaining cell objects (that aren't Room objects) using free spaces.txt
-
-            // #4 create all the suspect objects and load them into the correct cells using setEntity
-
-            // #5 create all the weapon objects and add them to rooms randomly as per the brief.
         } catch (IOException e) {
             throw new Error(e);
         }
@@ -154,7 +147,7 @@ public class Board {
         } catch (IOException e) {
             throw new Error(e);
         }
-        
+
         // read all the suspects and place them onto the board
         try {
             Scanner startingPlacesScanner = new Scanner(startingPlacesFile);
@@ -162,10 +155,10 @@ public class Board {
                 String token = startingPlacesScanner.next();
                 // skip comments
                 if (token.startsWith("#")) {
-                	startingPlacesScanner.nextLine();
+                    startingPlacesScanner.nextLine();
                     continue;
                 }
-                
+
                 int x = Integer.parseInt(token);
                 int y = startingPlacesScanner.nextInt();
                 String initials = startingPlacesScanner.next();
@@ -185,7 +178,7 @@ public class Board {
      * Get a set of all the available directions coming from this cell
      *
      * @param cell
-	 * @param exceptions Cells that are not allowed to be visited
+     * @param exceptions Cells that are not allowed to be visited
      * @return
      */
     public Set<Cell.Direction> getAvaliableNeighbours(Cell cell, Set<Cell> exceptions) {
@@ -193,9 +186,14 @@ public class Board {
 
         for (Cell.Direction d : Cell.Direction.values()) {
             Cell neighbour = getNeighbourCell(cell, d);
-            if (neighbour == null) continue;
-            if (exceptions.contains(neighbour)) continue;
-            if (neighbour.isFree()) directions.add(d);
+            if (neighbour == null) continue; // if neighbour exists
+            if (exceptions.contains(neighbour)) continue; // if neighbour is not in exceptions
+            if (!neighbour.isFree()) continue; // if neighbour is free
+            if (neighbour instanceof RoomEntranceCell) { // check room entrance is correct orientation
+                RoomEntranceCell ent = (RoomEntranceCell) neighbour;
+                if(d.reverse() != ent.getDirection()) continue;
+            }
+            directions.add(d);
         }
 
         return directions;
@@ -236,7 +234,8 @@ public class Board {
      * Get the cell at a position
      */
     public Cell getCell(int x, int y) {
-        if (x < 0 || x >= width || y < 0 || y >= height) throw new IllegalArgumentException("Invalid position on the board.");
+        if (x < 0 || x >= width || y < 0 || y >= height)
+            throw new IllegalArgumentException("Invalid position on the board.");
         return cells[y][x];
     }
 
@@ -262,6 +261,7 @@ public class Board {
 
     /**
      * Get a suspect at an index
+     *
      * @param index
      * @return
      */

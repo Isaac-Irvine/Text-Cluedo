@@ -22,6 +22,26 @@ public abstract class Cell {
             }
 		    else return null;
 		}
+
+
+        /**
+         * The reverse of this direction
+         * @return
+         */
+		public Direction reverse() {
+            switch(this) {
+                case UP:
+                    return DOWN;
+                case DOWN:
+                    return UP;
+                case LEFT:
+                    return RIGHT;
+                case RIGHT:
+                    return LEFT;
+                default:
+                    return null;
+            }
+        }
 	}
 
 

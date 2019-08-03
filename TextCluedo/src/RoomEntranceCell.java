@@ -1,11 +1,14 @@
 public class RoomEntranceCell extends Cell{
     private Cell.Direction direction;
     private String doorName;
+    private Room room;
 
-    public RoomEntranceCell(int x, int y, char[] chars, Cell.Direction direction) {
+    public RoomEntranceCell(Room room, int x, int y, char[] chars, Cell.Direction direction) {
         super(x, y, chars, true);
         this.direction = direction;
         doorName = direction.name() + " DOOR";
+
+        this.room = room;
     }
 
 	/**
@@ -15,4 +18,11 @@ public class RoomEntranceCell extends Cell{
 	public Cell.Direction getDirection() {
     	return direction;
 	}
+
+    /**
+     * Get the room
+     */
+    public Room getRoom() {
+        return room;
+    }
 }

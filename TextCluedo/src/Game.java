@@ -11,7 +11,7 @@ public class Game {
 	public static final String[] allWeapons = new String[]
 			{"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
 	public static final String[] allRooms = new String[]
-			{"Kitchen", "Ball Room", "Conservatory", "Billiard Room", "Library", "Study", "Hall", "Lounge"};
+			{"Kitchen", "Ball Room", "Conservatory", "Dining Room", "Billiard Room", "Lounge", "Hall", "Study", "Library"};
 
 	// easy way to look up the index of a suspect in the array. Contains some aliases
 	public static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{

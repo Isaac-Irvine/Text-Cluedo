@@ -5,6 +5,6 @@ public class FreeCell extends Cell {
      * @param y
      */
     public FreeCell(int x, int y) {
-        super(x, y, new char[] {' ', ' '}, true);
+        super(x, y, "  ".toCharArray(), true);
     }
 }
