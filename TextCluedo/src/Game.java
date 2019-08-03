@@ -5,6 +5,8 @@ public class Game {
 	private Board board;
 	private List<Player> players;
 	private int currentTurn;
+	private int incorrectGuesses;
+	private boolean gameOver;
 
 	public static final String[] allSuspects = new String[]
 			{"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
@@ -38,6 +40,8 @@ public class Game {
 		// create the board
 		board = new Board("map/", 26, 27);
 		currentTurn = 0;
+		gameOver = false;
+		incorrectGuesses = 0;
 
 		players = new ArrayList<>();
 		List<Card> playerCards = new ArrayList<>();
@@ -119,6 +123,7 @@ public class Game {
 			player.addCard(playerCards.get(i));
 		}
 
+		// run the game loop
 		run();
 	}
 
@@ -126,13 +131,15 @@ public class Game {
 	 * Run the game
 	 */
 	public void run() {
-		for(int i = 0; i < 10; i++) { // TODO implement proper game loop
+		while(!gameOver) {
 			draw();
 			Player player = players.get(currentTurn);
 
-			System.out.println(player);
+			if (!player.hasAccused()) {
+				System.out.println(player);
 
-			player.turn();
+				player.turn();
+			}
 
 			currentTurn++;
 			currentTurn %= players.size();
@@ -144,5 +151,57 @@ public class Game {
 	 */
 	public void draw() {
 		System.out.print("\n" + board.toString());
+	}
+
+	/**
+	 * Check if an accusation is correct for a given player
+	 */
+	public void checkAccusation(Player player, Card suspect, Card weapon, Card room) {
+		if(suspect == this.murderer && weapon == this.weapon && room == this.room) {
+			endGame(player);
+		} else {
+			incorrectGuesses++;
+			System.out.println(player + " has accused incorrectly, so is out of the game!");
+			if(incorrectGuesses == players.size()) endGame(null);
+		}
+	}
+
+	/**
+	 * End the game by printing the
+	 * @param correctGuess non-null will imply this person has won the game.
+	 */
+	public void endGame(Player correctGuess) {
+		if(correctGuess != null) System.out.println("\n" + correctGuess + " has accused correctly and has won the game!");
+		else System.out.println("\nNo one managed to accuse the murder correctly, so the game is over.");
+		System.out.println("\nMurderer: " + murderer.getName());
+		System.out.println("Weapon: " + weapon.getName());
+		System.out.println("Room: " + room.getName());
+
+		gameOver = true;
+	}
+
+
+
+
+	/**
+	 * Get a number input
+	 * @return
+	 */
+	public static int getNumberInput(Scanner scanner, int min, int max) {
+		while (true) {
+			String line = scanner.nextLine();
+
+			try {
+				int choice = Integer.parseInt(line);
+				if (choice < min || choice > max) {
+					System.out.print("Invalid option, Enter again: ");
+					continue;
+				}
+
+				return choice;
+			} catch (NumberFormatException e) {
+				System.out.print("Invalid option, Enter again: ");
+			}
+		}
 	}
 }

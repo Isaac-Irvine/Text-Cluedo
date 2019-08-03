@@ -47,8 +47,9 @@ public class Player {
             add("0: Roll Dice");
             add("1: Check Cards");
             add("2: Make Accusation");
+            add("3: Quit Game");
         }};
-        if (suspect.getCurrentRoom() != null) options.add("3: Make Suggestion");
+        if (suspect.getCurrentRoom() != null) options.add("4: Make Suggestion");
 
         while (!finishedTurn) {
             System.out.println("\nChoose Action: " + options);
@@ -77,11 +78,13 @@ public class Player {
             // accusation
             else if (option.equals("2")) {
                 accuse();
-                hasAccused = true;
+                finishedTurn = true;
+            } else if (option.equals("3")) {
+                game.endGame(null);
                 finishedTurn = true;
             }
             // suggestion (will finish your turn)
-            else if (option.equals("3") && suspect.getCurrentRoom() != null) {
+            else if (option.equals("4") && suspect.getCurrentRoom() != null) {
                 suggest();
                 finishedTurn = true;
             }
@@ -101,7 +104,9 @@ public class Player {
      * Make an accusation
      */
     public void accuse() {
-
+        // TODO make accusation
+        hasAccused = true;
+        game.checkAccusation(this, null, null, null);
     }
 
     /**
@@ -188,7 +193,7 @@ public class Player {
                 System.out.print("Enter the number corresponding to the door you want to exit: ");
 
                 // get choice
-                int choice = getNumberInput(0, cellList.size());
+                int choice = Game.getNumberInput(scanner, 0, cellList.size() - 1);
 
                 // move
                 RoomEntranceCell exit = cellList.get(choice);
@@ -212,28 +217,6 @@ public class Player {
      */
     public boolean hasCard(Card card) {
         return cards.contains(card);
-    }
-
-    /**
-     * Get a number input
-     * @return
-     */
-    private int getNumberInput(int min, int max) {
-        String line = scanner.nextLine();
-
-        try {
-            int choice = Integer.parseInt(line);
-            if (choice < min || choice >= max) {
-                System.out.print("Invalid option, Enter again: ");
-                return getNumberInput(min, max);
-            }
-
-            return choice;
-        }catch(NumberFormatException e) {
-            System.out.print("Invalid option, Enter again: ");
-            return getNumberInput(min, max);
-
-        }
     }
 
 

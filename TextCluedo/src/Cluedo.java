@@ -6,12 +6,7 @@ public class Cluedo {
 		Scanner scan = new Scanner(System.in);
 		System.out.print("Enter the number of players (3-6): ");
 
-		int nPlayers = scan.nextInt();
-
-		while(nPlayers < 3 || nPlayers > 6) {
-			System.out.print("Invalid number of players. Enter again: ");
-			nPlayers = scan.nextInt();
-		}
+		int nPlayers = Game.getNumberInput(scan, 3, 6);
 
 		new Game(nPlayers);
 	}
