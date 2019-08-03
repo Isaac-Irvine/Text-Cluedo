@@ -5,7 +5,7 @@ public class Card {
      * Card type could be room, suspect or weapon.
      */
     public enum CardType {
-        ROOM, SUSPECT, WEAPON;
+        ROOM, SUSPECT, WEAPON
     }
 
     private String name;

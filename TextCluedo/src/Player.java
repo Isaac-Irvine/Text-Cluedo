@@ -104,9 +104,21 @@ public class Player {
      * Make an accusation
      */
     public void accuse() {
-        // TODO make accusation
         hasAccused = true;
-        game.checkAccusation(this, null, null, null);
+
+        System.out.println("\nPick the circumstances of the murder correctly to win the game. Guess incorrectly and you will be out.\n");
+
+        Card suspect = Game.getSuspectInput(scanner);
+
+        System.out.println();
+
+        Card weapon = Game.getWeaponInput(scanner);
+
+        System.out.println();
+
+        Card room = Game.getRoomInput(scanner);
+
+        game.checkAccusation(this, suspect, weapon, room);
     }
 
     /**

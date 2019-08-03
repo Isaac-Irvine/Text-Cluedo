@@ -157,11 +157,11 @@ public class Game {
 	 * Check if an accusation is correct for a given player
 	 */
 	public void checkAccusation(Player player, Card suspect, Card weapon, Card room) {
-		if(suspect == this.murderer && weapon == this.weapon && room == this.room) {
+		if(suspect.equals(this.murderer) && weapon.equals(this.weapon) && room.equals(this.room)) {
 			endGame(player);
 		} else {
 			incorrectGuesses++;
-			System.out.println(player + " has accused incorrectly, so is out of the game!");
+			System.out.println("\n" + player + " has accused incorrectly, so is out of the game!");
 			if(incorrectGuesses == players.size()) endGame(null);
 		}
 	}
@@ -180,8 +180,71 @@ public class Game {
 		gameOver = true;
 	}
 
+	/**
+	 * Get suspect card input
+	 * @param scanner
+	 * @return
+	 */
+	public static Card getSuspectInput(Scanner scanner) {
+		System.out.print("Suspects: [");
+		for (int i = 0; i < allSuspects.length; i++) {
+			System.out.print(i + ": " + allSuspects[i]);
+			if (i != allSuspects.length - 1) System.out.print(", ");
+		}
+		System.out.println("]");
 
+		System.out.print("Enter the number corresponding to the suspect you pick: ");
+		int index = getNumberInput(scanner, 0, allSuspects.length - 1);
 
+		String name = allSuspects[index];
+		Card card = new Card(name,Card.CardType.SUSPECT);
+
+		return card;
+	}
+
+	/**
+	 * Get weapon card input
+	 * @param scanner
+	 * @return
+	 */
+	public static Card getWeaponInput(Scanner scanner) {
+		System.out.print("Weapons: [");
+		for (int i = 0; i < allWeapons.length; i++) {
+			System.out.print(i + ": " + allWeapons[i]);
+			if (i != allWeapons.length - 1) System.out.print(", ");
+		}
+		System.out.println("]");
+
+		System.out.print("Enter the number corresponding to the weapon you pick: ");
+		int index = getNumberInput(scanner, 0, allWeapons.length - 1);
+
+		String name = allWeapons[index];
+		Card card = new Card(name,Card.CardType.WEAPON);
+
+		return card;
+	}
+
+	/**
+	 * Get weapon card input
+	 * @param scanner
+	 * @return
+	 */
+	public static Card getRoomInput(Scanner scanner) {
+		System.out.print("Rooms: [");
+		for (int i = 0; i < allRooms.length; i++) {
+			System.out.print(i + ": " + allRooms[i]);
+			if (i != allRooms.length - 1) System.out.print(", ");
+		}
+		System.out.println("]");
+
+		System.out.print("Enter the number corresponding to the room you pick: ");
+		int index = getNumberInput(scanner, 0, allRooms.length - 1);
+
+		String name = allRooms[index];
+		Card card = new Card(name,Card.CardType.ROOM);
+
+		return card;
+	}
 
 	/**
 	 * Get a number input
