@@ -63,7 +63,7 @@ public class Player {
                     move(diceRoll);
                     hasMoved = true;
                     options.set(0, "0: Finish Turn");
-                    if (suspect.getCurrentRoom() != null) options.set(3, "3: Make Suggestion");
+                    if (suspect.getCurrentRoom() != null && options.size() < 4) options.add("3: Make Suggestion");
                 }
                 // finish turn
                 else {
@@ -124,29 +124,42 @@ public class Player {
         while (nSteps > 0) {
             game.draw();
 
-            // get available directions
-            Set<Cell.Direction> directions = suspect.getAvaliableDirections(visited);
+            // regular move through free spaces
+            if(suspect.getCurrentRoom() == null) {
+                // get available directions
+                Set<Cell.Direction> directions = suspect.getAvaliableDirections(visited);
 
-            if (directions.size() == 0) {
-                System.out.println("You are unable to move further.");
+                if (directions.size() == 0) {
+                    System.out.println("You are unable to move further.");
+                    break;
+                }
+                System.out.println("Moves left: " + nSteps);
+
+                System.out.println("\nAvailable Directions: " + directions);
+                System.out.print("Enter direction: ");
+
+                // get choice
+                Cell.Direction direction = Cell.Direction.getDirection(scanner.nextLine());
+
+                while (direction == null || !directions.contains(direction)) {
+                    System.out.print("Invalid Direction, Enter again: ");
+                    direction = Cell.Direction.getDirection(scanner.nextLine());
+                }
+
+                // move
+                visited.add(suspect.getLocation());
+                suspect.move(direction);
+
+                // stop moving if you reach a room
+                if(suspect.getCurrentRoom() != null) {
+                    break;
+                }
+            }
+            // exit a room
+            else {
+                System.out.println("Yeah I haven't implemented the ability to leave a room..");
                 break;
             }
-            System.out.println("Moves left: " + nSteps);
-
-            System.out.println("\nAvailable Directions: " + directions);
-            System.out.print("Enter direction: ");
-
-            // get choice
-            Cell.Direction direction = Cell.Direction.getDirection(scanner.nextLine());
-
-            while (direction == null || !directions.contains(direction)) {
-                System.out.print("Invalid Direction, Enter again: ");
-                direction = Cell.Direction.getDirection(scanner.nextLine());
-            }
-
-            // move
-            visited.add(suspect.getLocation());
-            suspect.move(direction);
 
             nSteps--;
         }

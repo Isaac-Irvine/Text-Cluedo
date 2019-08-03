@@ -59,9 +59,16 @@ public class Suspect extends Entity {
 
 		// check that the neighbour is a room.
 		if(neighbour instanceof RoomEntranceCell) {
-			// TODO enter room - but check that the direction is correct
+			RoomEntranceCell ent = (RoomEntranceCell) neighbour;
+			if(direction.reverse() != ent.getDirection()) throw new IllegalStateException("Cannot move into a room entrance from the wrong direction.");
+
+			currentRoom = ent.getRoom();
+			Cell cell = currentRoom.getAvailableCell();
+
+			moveTo(cell);
 		}
 
+		// regular movement
 		else {
 			moveTo(neighbour);
 		}

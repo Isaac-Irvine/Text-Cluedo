@@ -5,7 +5,11 @@ public class Room {
     private List<RoomEntityCell> roomCells; // list of all the places things can be put in the room.
     private List<RoomEntranceCell> roomEntrances; // list of all the entrances to the room
     private String name;
-    
+
+    /**
+     * Create a room
+     * @param name
+     */
     public Room(String name) {
         this.name = name;
         roomCells = new ArrayList<>();
@@ -34,9 +38,18 @@ public class Room {
         return null;
     }
 
+    /**
+     * Add a RoomEntityCell to the room
+     * @param cell
+     */
     public void addEntityCell(RoomEntityCell cell) {
         roomCells.add(cell);
     }
+
+    /**
+     * Add a RoomEntranceCell to the room
+     * @param cell
+     */
     public void addEntranceCell(RoomEntranceCell cell) {
         roomEntrances.add(cell);
     }
