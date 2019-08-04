@@ -66,7 +66,7 @@ public class Player {
                     move(diceRoll);
                     hasMoved = true;
                     options.set(0, "0: Finish Turn");
-                    if (suspect.getCurrentRoom() != null && options.size() < 4) options.add("3: Make Suggestion");
+                    if (suspect.getCurrentRoom() != null && options.size() <= 4) options.add("4: Make Suggestion");
                 }
                 // finish turn
                 else {
@@ -129,6 +129,34 @@ public class Player {
     public void suggest() {
         if (suspect.getCurrentRoom() == null) throw new IllegalStateException("Cannot suggest if not in a room.");
 
+        System.out.println("\nPick the circumstances of the murder.\n");
+
+        Card otherSuspectCard = Game.getSuspectInput(scanner);
+        Suspect otherSuspect = null;
+        for (int i = 0; i < Game.allSuspects.length; i++) {
+            if (otherSuspectCard.getName().equals(Game.allSuspects[i]))
+                otherSuspect = suspect.getBoard().getSuspect(i);
+        }
+        if (otherSuspect == null) {
+            throw new Error("Cant find that suspect in Game.allSuspects");
+        }
+
+        System.out.println();
+
+        Card weaponCard = Game.getWeaponInput(scanner);
+        Weapon weapon = null;
+        for (int i = 0; i < Game.allSuspects.length; i++) {
+            if (weaponCard.getName().equals(Game.allWeapons[i]))
+                weapon = suspect.getBoard().getWeapon(i);
+        }
+        if (weapon == null) {
+            throw new Error("Cant find that suspect in Game.allWeapons");
+        }
+
+        otherSuspect.moveTo(suspect.getCurrentRoom().getAvailableCell());
+        weapon.moveTo(suspect.getCurrentRoom().getAvailableCell());
+
+        // ToDo finish this.
     }
 
     /**

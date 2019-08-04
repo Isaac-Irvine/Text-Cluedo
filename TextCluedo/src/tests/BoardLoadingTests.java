@@ -4,7 +4,6 @@ import Game.*;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,9 +64,9 @@ public class BoardLoadingTests {
     void LoadTest4() {
         Board board = new Board("test maps/test1/", 3,3);
         Set<Cell.Direction> directions =  board.getAvailableNeighbours(board.getCell(0,0), new HashSet<>());
-        Set<Cell.Direction> exspectedDirections = new HashSet<Cell.Direction>();
-        exspectedDirections.add(Cell.Direction.DOWN);
-        exspectedDirections.add(Cell.Direction.RIGHT);
-        assertEquals(exspectedDirections, directions);
+        Set<Cell.Direction> expectedDirections = new HashSet<Cell.Direction>();
+        expectedDirections.add(Cell.Direction.DOWN);
+        expectedDirections.add(Cell.Direction.RIGHT);
+        assertEquals(expectedDirections, directions);
     }
 }

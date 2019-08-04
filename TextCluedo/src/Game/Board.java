@@ -277,4 +277,14 @@ public class Board {
     public Suspect getSuspect(int index) {
         return allSuspects.get(index);
     }
+
+    /**
+     * Get a suspect at an index
+     *
+     * @param index
+     * @return
+     */
+    public Weapon getWeapon(int index) {
+        return allWeapons.get(index);
+    }
 }
