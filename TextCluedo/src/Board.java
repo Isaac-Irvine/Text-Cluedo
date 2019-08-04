@@ -172,6 +172,13 @@ public class Board {
             throw new Error(e);
         }
 
+        // place a each weapon into a random room until all the rooms are full or your out of weapons.
+        String[] allRemainingWeapons = {"CS", "Da", "LP", "Re", "Ro", "Sp"}; //Game.allWeapons.clone();
+        List<Room> allRoomsShuffled = new ArrayList<>(allRooms);
+        Collections.shuffle(allRoomsShuffled);
+        for (int i = 0; i < allRemainingWeapons.length && i < allRoomsShuffled.size(); i++) {
+            allWeapons.add(new Weapon(this, allRoomsShuffled.get(i), allRemainingWeapons[i].toCharArray()));
+        }
     }
 
     /**
@@ -181,7 +188,7 @@ public class Board {
      * @param exceptions Cells that are not allowed to be visited
      * @return
      */
-    public Set<Cell.Direction> getAvaliableNeighbours(Cell cell, Set<Cell> exceptions) {
+    public Set<Cell.Direction> getAvailableNeighbours(Cell cell, Set<Cell> exceptions) {
         Set<Cell.Direction> directions = new HashSet<>();
 
         for (Cell.Direction d : Cell.Direction.values()) {

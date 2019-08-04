@@ -34,7 +34,7 @@ public class Suspect extends Entity {
 		if( currentRoom != null) { // no avaliable directions if you are in a room
 			return new HashSet<>();
 		}
-		return getBoard().getAvaliableNeighbours(getLocation(), visited);
+		return getBoard().getAvailableNeighbours(getLocation(), visited);
 	}
 
 	/**
