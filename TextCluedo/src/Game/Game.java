@@ -1,4 +1,5 @@
-import java.io.File;
+package Game;
+
 import java.util.*;
 
 public class Game {
@@ -13,7 +14,7 @@ public class Game {
 	public static final String[] allWeapons = new String[]
 			{"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
 	public static final String[] allRooms = new String[]
-			{"Kitchen", "Ball Room", "Conservatory", "Dining Room", "Billiard Room", "Lounge", "Hall", "Study", "Library"};
+			{"Kitchen", "Ball Game.Room", "Conservatory", "Dining Game.Room", "Billiard Game.Room", "Lounge", "Hall", "Study", "Library"};
 
 	// easy way to look up the index of a suspect in the array. Contains some aliases
 	public static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{
@@ -82,7 +83,7 @@ public class Game {
 
 		// add all players
 		for (int p = 1; p <= nPlayers; p++) {
-			System.out.print("\nPlayer " + p + ", please pick your character\n[");
+			System.out.print("\nGame.Player " + p + ", please pick your character\n[");
 			for (int i = 0; i < charactersLeft.size(); i++) {
 				System.out.print(i + ": " + charactersLeft.get(i));
 				if (i != charactersLeft.size() - 1) System.out.print(", ");
@@ -174,8 +175,8 @@ public class Game {
 		if(correctGuess != null) System.out.println("\n" + correctGuess + " has accused correctly and has won the game!");
 		else System.out.println("\nNo one managed to accuse the murder correctly, so the game is over.");
 		System.out.println("\nMurderer: " + murderer.getName());
-		System.out.println("Weapon: " + weapon.getName());
-		System.out.println("Room: " + room.getName());
+		System.out.println("Game.Weapon: " + weapon.getName());
+		System.out.println("Game.Room: " + room.getName());
 
 		gameOver = true;
 	}

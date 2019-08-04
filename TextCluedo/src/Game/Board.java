@@ -1,3 +1,5 @@
+package Game;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -88,7 +90,7 @@ public class Board {
                     cells[y][x] = newCell;
                 } else if (token.equals("door")) {
                     roomsScanner.next(); // skipping '='
-                    // get the old cell and replace it with a Room Entity cell
+                    // get the old cell and replace it with a Game.Room Game.Entity cell
                     int x = roomsScanner.nextInt();
                     int y = roomsScanner.nextInt();
                     String directionAsString = roomsScanner.next();
@@ -173,7 +175,7 @@ public class Board {
         }
 
         // place a each weapon into a random room until all the rooms are full or your out of weapons.
-        String[] allRemainingWeapons = {"CS", "Da", "LP", "Re", "Ro", "Sp"}; //Game.allWeapons.clone();
+        String[] allRemainingWeapons = {"CS", "Da", "LP", "Re", "Ro", "Sp"}; //Game.Game.allWeapons.clone();
         List<Room> allRoomsShuffled = new ArrayList<>(allRooms);
         Collections.shuffle(allRoomsShuffled);
         for (int i = 0; i < allRemainingWeapons.length && i < allRoomsShuffled.size(); i++) {

@@ -1,8 +1,10 @@
+package Game;
+
 import java.util.Objects;
 
 public class Card {
     /**
-     * Card type could be room, suspect or weapon.
+     * Game.Card type could be room, suspect or weapon.
      */
     public enum CardType {
         ROOM, SUSPECT, WEAPON
@@ -31,7 +33,7 @@ public class Card {
     }
 
     /**
-     * Card Type
+     * Game.Card Type
      * @return
      */
     public CardType getType() {
@@ -39,7 +41,7 @@ public class Card {
     }
 
     /**
-     * Card equals method
+     * Game.Card equals method
      * @param o
      * @return
      */
@@ -53,7 +55,7 @@ public class Card {
     }
 
     /**
-     * Card hashcode
+     * Game.Card hashcode
      * @return
      */
     @Override
@@ -62,7 +64,7 @@ public class Card {
     }
 
     /**
-     * Card name
+     * Game.Card name
      * @return
      */
     public String toString() {

@@ -1,3 +1,5 @@
+package Game;
+
 public class RoomEntityCell extends Cell {
     private Room room;
 

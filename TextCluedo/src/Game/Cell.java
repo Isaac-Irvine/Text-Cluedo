@@ -1,3 +1,5 @@
+package Game;
+
 public abstract class Cell {
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;

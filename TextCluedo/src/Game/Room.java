@@ -1,3 +1,5 @@
+package Game;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +41,7 @@ public class Room {
     }
 
     /**
-     * Add a RoomEntityCell to the room
+     * Add a Game.RoomEntityCell to the room
      * @param cell
      */
     public void addEntityCell(RoomEntityCell cell) {
@@ -47,7 +49,7 @@ public class Room {
     }
 
     /**
-     * Add a RoomEntranceCell to the room
+     * Add a Game.RoomEntranceCell to the room
      * @param cell
      */
     public void addEntranceCell(RoomEntranceCell cell) {

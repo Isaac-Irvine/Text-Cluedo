@@ -1,3 +1,5 @@
+package Game;
+
 import java.util.*;
 
 public class Player {
@@ -47,7 +49,7 @@ public class Player {
             add("0: Roll Dice");
             add("1: Check Cards");
             add("2: Make Accusation");
-            add("3: Quit Game");
+            add("3: Quit Game.Game");
         }};
         if (suspect.getCurrentRoom() != null) options.add("4: Make Suggestion");
 
@@ -233,11 +235,11 @@ public class Player {
 
 
     /**
-     * Player string.
+     * Game.Player string.
      *
      * @return
      */
     public String toString() {
-        return "Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
+        return "Game.Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
     }
 }

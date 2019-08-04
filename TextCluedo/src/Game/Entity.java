@@ -1,3 +1,5 @@
+package Game;
+
 public abstract class Entity {
     private Cell location;
     private Board board;

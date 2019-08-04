@@ -1,3 +1,5 @@
+package Game;
+
 public class RoomEntranceCell extends Cell{
     private Cell.Direction direction;
     private Room room;
