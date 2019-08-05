@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardLoadingTests {
 
-    // tests to see weather it can load all the chars and display the board correctly.
+    // tests to see whether it can load all the chars and display the board correctly.
     @Test
     void LoadTest1() {
         Board board = new Board("test maps/test1/", 3,3);
@@ -25,7 +25,7 @@ public class BoardLoadingTests {
         assertEquals("WW", boardText[2].substring(4,6));
     }
 
-    // tests to see weather it puts all the cells into the right type
+    // tests to see whether it puts all the cells into the right type
     @Test
     void LoadTest2() {
         Board board = new Board("test maps/test1/", 3,3);

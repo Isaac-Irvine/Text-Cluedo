@@ -167,11 +167,11 @@ public class Player {
      * @param nSteps
      */
     public void move(int nSteps) {
-        System.out.println("\nDice roll: " + nSteps);
+        if (game != null) System.out.println("\nDice roll: " + nSteps);
         Set<Cell> visited = new HashSet<>();
 
         while (nSteps > 0) {
-            game.draw();
+            if (game != null) game.draw();
 
             // regular move through free spaces
             if (suspect.getCurrentRoom() == null) {
@@ -179,19 +179,19 @@ public class Player {
                 Set<Cell.Direction> directions = suspect.getAvaliableDirections(visited);
 
                 if (directions.size() == 0) {
-                    System.out.println("You are unable to move further.");
+                    if (game != null) System.out.println("You are unable to move further.");
                     break;
                 }
-                System.out.println("Moves left: " + nSteps);
+                if (game != null) System.out.println("Moves left: " + nSteps);
 
-                System.out.println("\nAvailable Directions: " + directions);
-                System.out.print("Enter direction: ");
+                if (game != null) System.out.println("\nAvailable Directions: " + directions);
+                if (game != null) System.out.print("Enter direction: ");
 
                 // get choice
                 Cell.Direction direction = Cell.Direction.getDirection(scanner.nextLine());
 
                 while (direction == null || !directions.contains(direction)) {
-                    System.out.print("Invalid Direction, Enter again: ");
+                    if (game != null) System.out.print("Invalid Direction, Enter again: ");
                     direction = Cell.Direction.getDirection(scanner.nextLine());
                 }
 
@@ -209,7 +209,7 @@ public class Player {
                 List<RoomEntranceCell> cellList = suspect.getAvaliableRoomExits();
 
                 if (cellList.size() == 0) {
-                    System.out.println("You are unable to exit the room as all exits are blocked.");
+                    if (game != null) System.out.println("You are unable to exit the room as all exits are blocked.");
                     break;
                 }
 
@@ -231,10 +231,10 @@ public class Player {
                     }
 
                 }
-                System.out.println("Moves left: " + nSteps);
+                if (game != null) System.out.println("Moves left: " + nSteps);
 
-                System.out.println("\nAvailable Exits: " + options);
-                System.out.print("Enter the number corresponding to the door you want to exit: ");
+                if (game != null) System.out.println("\nAvailable Exits: " + options);
+                if (game != null) System.out.print("Enter the number corresponding to the door you want to exit: ");
 
                 // get choice
                 int choice = Game.getNumberInput(scanner, 0, cellList.size() - 1);
@@ -249,8 +249,8 @@ public class Player {
             nSteps--;
         }
 
-        game.draw();
-        System.out.println("Movement finished.");
+        if (game != null) game.draw();
+        if (game != null) System.out.println("Movement finished.");
     }
 
     /**
