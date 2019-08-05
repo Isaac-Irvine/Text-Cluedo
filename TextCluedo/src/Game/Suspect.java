@@ -70,10 +70,7 @@ public class Suspect extends Entity {
 			RoomEntranceCell ent = (RoomEntranceCell) neighbour;
 			if(direction.reverse() != ent.getDirection()) throw new IllegalStateException("Cannot move into a room entrance from the wrong direction.");
 
-			currentRoom = ent.getRoom();
-			Cell cell = currentRoom.getAvailableCell();
-
-			moveTo(cell);
+			enterRoom(ent.getRoom());
 		}
 
 		// regular movement
@@ -90,4 +87,14 @@ public class Suspect extends Entity {
 		moveTo(neighbour);
 		currentRoom = null;
 	}
+
+	/**
+	 * Move into a room
+	 * @param room
+	 */
+    public void enterRoom(Room room) {
+		currentRoom = room;
+		Cell cell = currentRoom.getAvailableCell();
+		moveTo(cell);
+    }
 }

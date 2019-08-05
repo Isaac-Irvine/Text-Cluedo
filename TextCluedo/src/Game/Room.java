@@ -55,4 +55,11 @@ public class Room {
     public void addEntranceCell(RoomEntranceCell cell) {
         roomEntrances.add(cell);
     }
+
+    /**
+     * Get the room name
+     */
+    public String getName() {
+        return name;
+    }
 }

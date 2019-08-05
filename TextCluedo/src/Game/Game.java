@@ -14,7 +14,7 @@ public class Game {
 	public static final String[] allWeapons = new String[]
 			{"Candlestick", "Dagger", "Lead Pipe", "Revolver", "Rope", "Spanner"};
 	public static final String[] allRooms = new String[]
-			{"Kitchen", "Ball Game.Room", "Conservatory", "Dining Game.Room", "Billiard Game.Room", "Lounge", "Hall", "Study", "Library"};
+			{"Kitchen", "Ball Room", "Conservatory", "Dining Room", "Billiard Room", "Lounge", "Hall", "Study", "Library"};
 
 	// easy way to look up the index of a suspect in the array. Contains some aliases
 	public static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{
@@ -83,7 +83,7 @@ public class Game {
 
 		// add all players
 		for (int p = 1; p <= nPlayers; p++) {
-			System.out.print("\nGame.Player " + p + ", please pick your character\n[");
+			System.out.print("\nPlayer " + p + ", please pick your character\n[");
 			for (int i = 0; i < charactersLeft.size(); i++) {
 				System.out.print(i + ": " + charactersLeft.get(i));
 				if (i != charactersLeft.size() - 1) System.out.print(", ");
@@ -168,15 +168,68 @@ public class Game {
 	}
 
 	/**
-	 * End the game by printing the
+	 * Check a suggestion. The function assumes the person with the index currentTurn is the player that made the suggestion.
+	 * The first player in a clockwise direction that contains one of the suggested cards is asked to refute.
+	 */
+	public void checkSuggestion(Card suspect, Card weapon, Card room) {
+		Player currentPlayer = players.get(currentTurn);
+
+		System.out.println();
+		int pIndex = currentTurn;
+		pIndex++;
+		pIndex %= players.size();
+
+		while (currentTurn != pIndex) {
+			Player player = players.get(pIndex);
+
+			// get list of cards they have from the suspect, weapon and room.
+			List<Card> refutedCards = new ArrayList<>();
+			if (player.hasCard(suspect)) refutedCards.add(suspect);
+			if (player.hasCard(weapon)) refutedCards.add(weapon);
+			if (player.hasCard(room)) refutedCards.add(room);
+
+			if (refutedCards.size() == 0) {
+				// player does not have that card
+				System.out.println(player + " has none of the suggested cards.");
+			}
+			else {
+				// found a player with one of those cards.
+				System.out.println(player + ", you have at least one of the suggested cards. Pick one to refute to " + currentPlayer);
+
+				System.out.print("Card Options: [");
+				for (int i = 0; i < refutedCards.size(); i++) {
+					System.out.print(i + ": " + refutedCards.get(i));
+					if (i != refutedCards.size() - 1) System.out.print(", ");
+				}
+				System.out.println("]");
+
+				int cardIndex = getNumberInput(new Scanner(System.in), 0, refutedCards.size() - 1);
+
+				Card card = refutedCards.get(cardIndex);
+
+				System.out.println(currentPlayer + ", " + player + " has the " + card + " card.");
+
+				return;
+			}
+
+			pIndex++;
+			pIndex %= players.size();
+		}
+
+		System.out.println(currentPlayer + ", no players have refuted those cards.");
+
+	}
+
+	/**
+	 * End the game by printing the winner and the murder circumstances
 	 * @param correctGuess non-null will imply this person has won the game.
 	 */
 	public void endGame(Player correctGuess) {
 		if(correctGuess != null) System.out.println("\n" + correctGuess + " has accused correctly and has won the game!");
 		else System.out.println("\nNo one managed to accuse the murder correctly, so the game is over.");
 		System.out.println("\nMurderer: " + murderer.getName());
-		System.out.println("Game.Weapon: " + weapon.getName());
-		System.out.println("Game.Room: " + room.getName());
+		System.out.println("Weapon: " + weapon.getName());
+		System.out.println("Room: " + room.getName());
 
 		gameOver = true;
 	}

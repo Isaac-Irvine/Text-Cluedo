@@ -49,7 +49,7 @@ public class Player {
             add("0: Roll Dice");
             add("1: Check Cards");
             add("2: Make Accusation");
-            add("3: Quit Game.Game");
+            add("3: Quit Game");
         }};
         if (suspect.getCurrentRoom() != null) options.add("4: Make Suggestion");
 
@@ -138,7 +138,7 @@ public class Player {
                 otherSuspect = suspect.getBoard().getSuspect(i);
         }
         if (otherSuspect == null) {
-            throw new Error("Cant find that suspect in Game.allSuspects");
+            throw new Error("Cant find that suspect in allSuspects");
         }
 
         System.out.println();
@@ -150,13 +150,15 @@ public class Player {
                 weapon = suspect.getBoard().getWeapon(i);
         }
         if (weapon == null) {
-            throw new Error("Cant find that suspect in Game.allWeapons");
+            throw new Error("Cant find that suspect in allWeapons");
         }
 
-        otherSuspect.moveTo(suspect.getCurrentRoom().getAvailableCell());
+        otherSuspect.enterRoom(suspect.getCurrentRoom());
         weapon.moveTo(suspect.getCurrentRoom().getAvailableCell());
 
-        // ToDo finish this.
+        Card roomCard = new Card(suspect.getCurrentRoom().getName(), Card.CardType.ROOM);
+
+        game.checkSuggestion( otherSuspectCard, weaponCard, roomCard);
     }
 
     /**
@@ -268,6 +270,6 @@ public class Player {
      * @return
      */
     public String toString() {
-        return "Game.Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
+        return "Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
     }
 }
