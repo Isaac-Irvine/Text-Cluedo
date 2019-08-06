@@ -1,5 +1,8 @@
 package Game;
 
+/**
+ * Represents a movable item on the board.
+ */
 public abstract class Entity {
     private Cell location;
     private Board board;

@@ -6,6 +6,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
+/**
+ * Overview of the board.
+ * Contains all the cells on the board and all the entities.
+ */
 public class Board {
     private static final String roomsFileName = "rooms.txt";
     private static final String freeSpacesFileName = "free spaces.txt";

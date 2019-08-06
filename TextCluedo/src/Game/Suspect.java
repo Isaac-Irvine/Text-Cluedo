@@ -2,6 +2,10 @@ package Game;
 
 import java.util.*;
 
+/**
+ * Represents a suspect on the board.
+ * Can be moved using directions
+ */
 public class Suspect extends Entity {
 	private Room currentRoom;
 

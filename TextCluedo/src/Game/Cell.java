@@ -1,6 +1,12 @@
 package Game;
 
+/**
+ * A grid space on the board
+ */
 public abstract class Cell {
+	/**
+	 * A direction
+	 */
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;
 

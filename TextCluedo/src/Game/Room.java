@@ -3,6 +3,10 @@ package Game;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a room.
+ * Contains the cells in the room.
+ */
 public class Room {
     private List<RoomEntityCell> roomCells; // list of all the places things can be put in the room.
     private List<RoomEntranceCell> roomEntrances; // list of all the entrances to the room

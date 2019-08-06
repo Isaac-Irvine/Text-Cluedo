@@ -1,5 +1,8 @@
 package Game;
 
+/**
+ * Free Cell
+ */
 public class FreeCell extends Cell {
     /**
      * Free cell. By default will always be blank and you can move into it.

@@ -2,6 +2,10 @@ package Game;
 
 import java.util.*;
 
+/**
+ * Overview of the game.
+ * Stores the board, all players and handles the game loop.
+ */
 public class Game {
 	private Board board;
 	private List<Player> players;
@@ -129,7 +133,7 @@ public class Game {
 	}
 
 	/**
-	 * Run the game
+	 * Run the game loop
 	 */
 	public void run() {
 		while(!gameOver) {

@@ -1,5 +1,8 @@
 package Game;
 
+/**
+ * Cells in the room where entities can appear
+ */
 public class RoomEntityCell extends Cell {
     private Room room;
 

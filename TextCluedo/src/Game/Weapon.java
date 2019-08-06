@@ -1,5 +1,8 @@
 package Game;
 
+/**
+ * Weapon on the board
+ */
 public class Weapon extends Entity {
 	/**
 	 * Create new weapon object

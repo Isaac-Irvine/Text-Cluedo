@@ -1,9 +1,12 @@
 package Game;
 
+/**
+ * Wall Cell
+ */
 public class WallCell extends Cell {
 
     /**
-     * Wall Game.Cell
+     * Wall Cell
      * Never free
      * @param x
      * @param y

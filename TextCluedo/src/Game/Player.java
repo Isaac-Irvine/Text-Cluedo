@@ -2,6 +2,10 @@ package Game;
 
 import java.util.*;
 
+/**
+ * Represents a player in the game.
+ * Has an ID, a suspect that they control and a list of cards.
+ */
 public class Player {
     private int num;
     private Game game;
