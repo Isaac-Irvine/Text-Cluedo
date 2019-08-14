@@ -27,7 +27,7 @@ public class MenuView implements View {
     public MenuView() {
         window = new Window("Pick players", 640, 480);
         window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
-        window.add(Box.createRigidArea(new Dimension(window.getWidth(), (window.getHeight() - PANEL_HEIGHT * 8)/2)));
+        window.add(Box.createRigidArea(new Dimension(window.getWidth(), (window.getHeight() - PANEL_HEIGHT * 8) / 2)));
 
         // player number selector
         nPlayers = 3;
@@ -67,6 +67,9 @@ public class MenuView implements View {
 
 
         JButton exitButton = new JButton("Exit");
+
+        exitButton.addActionListener((ActionEvent e) -> window.close());
+
         footerPanel.add(doneButton);
         footerPanel.add(exitButton);
         footerPanel.setMaximumSize(new Dimension(window.getWidth(), PANEL_HEIGHT));
@@ -89,12 +92,18 @@ public class MenuView implements View {
 
         // reformat layout
         characterSelector.setLayout(new GridLayout(nPlayers, 2));
-        characterSelector.setMaximumSize(new Dimension(window.getWidth()/2, PANEL_HEIGHT * nPlayers));
+        characterSelector.setMaximumSize(new Dimension(window.getWidth() / 2, PANEL_HEIGHT * nPlayers));
 
         // create fields
         for (int i = 1; i <= nPlayers; i++) {
             JTextField field = new JTextField("Player " + i);
             JComboBox combo = new JComboBox(Game.allSuspects);
+            combo.setFocusable(false);
+
+            combo.addActionListener((ActionEvent e) -> {
+                updateCharacterValidity();
+            });
+
             characterSelector.add(field);
             characterSelector.add(combo);
 
@@ -103,6 +112,25 @@ public class MenuView implements View {
         }
 
         // redraw
+        updateCharacterValidity();
+    }
+
+    /**
+     * Update the colours of the combo boxes to show validity
+     */
+    private void updateCharacterValidity() {
+        for (JComboBox character : playerCharacters) {
+            int selectedIndex = character.getSelectedIndex();
+            int nCopies = 0;
+            for (JComboBox character2 : playerCharacters) {
+                if (character2.getSelectedIndex() == selectedIndex) nCopies++;
+            }
+
+            // valid if this character selection is unique
+            if(nCopies == 1) character.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+            else character.setBorder(BorderFactory.createLineBorder(Color.RED));
+        }
+
         window.redraw();
     }
 }

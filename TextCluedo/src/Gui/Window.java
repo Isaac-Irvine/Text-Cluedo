@@ -49,4 +49,11 @@ public class Window extends JPanel {
     public int getHeight() {
         return frame.getHeight();
     }
+
+    /**
+     * Close the window
+     */
+    public void close() {
+        frame.dispose();
+    }
 }
