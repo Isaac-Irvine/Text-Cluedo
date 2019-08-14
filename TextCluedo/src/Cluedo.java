@@ -1,4 +1,6 @@
-package Game;
+import Game.Game;
+import Gui.MenuView;
+import Gui.Window;
 
 import java.util.Scanner;
 
@@ -12,6 +14,9 @@ public class Cluedo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		MenuView view = new MenuView();
+
+
 		Scanner scan = new Scanner(System.in);
 		System.out.print("Enter the number of players (3-6): ");
 
