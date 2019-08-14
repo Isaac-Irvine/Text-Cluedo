@@ -17,11 +17,11 @@ public class Cluedo {
 		MenuView view = new MenuView();
 
 
-		Scanner scan = new Scanner(System.in);
-		System.out.print("Enter the number of players (3-6): ");
+		//Scanner scan = new Scanner(System.in);
+		//System.out.print("Enter the number of players (3-6): ");
 
-		int nPlayers = Game.getNumberInput(scan, 3, 6);
+		//int nPlayers = Game.getNumberInput(scan, 3, 6);
 
-		new Game(nPlayers);
+		//new Game(nPlayers);
 	}
 }

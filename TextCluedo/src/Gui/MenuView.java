@@ -12,6 +12,8 @@ import java.util.List;
  * Represents the
  */
 public class MenuView implements View {
+    private static final int PANEL_HEIGHT = 40;
+
     private Window window;
     private JComboBox playerSelect;
     private JPanel characterSelector;
@@ -25,6 +27,7 @@ public class MenuView implements View {
     public MenuView() {
         window = new Window("Pick players", 640, 480);
         window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
+        window.add(Box.createRigidArea(new Dimension(window.getWidth(), (window.getHeight() - PANEL_HEIGHT * 8)/2)));
 
         // player number selector
         nPlayers = 3;
@@ -37,6 +40,7 @@ public class MenuView implements View {
         playerSelect.setSelectedIndex(0);
         playerSelectPanel.add(playerSelectLabel);
         playerSelectPanel.add(playerSelect);
+        playerSelectPanel.setMaximumSize(new Dimension(window.getWidth(), PANEL_HEIGHT));
         window.add(playerSelectPanel);
 
         // create player amount selector updater
@@ -65,6 +69,9 @@ public class MenuView implements View {
         JButton exitButton = new JButton("Exit");
         footerPanel.add(doneButton);
         footerPanel.add(exitButton);
+        footerPanel.setMaximumSize(new Dimension(window.getWidth(), PANEL_HEIGHT));
+
+        window.add(Box.createVerticalGlue());
 
         // redraw
         window.redraw();
@@ -82,6 +89,7 @@ public class MenuView implements View {
 
         // reformat layout
         characterSelector.setLayout(new GridLayout(nPlayers, 2));
+        characterSelector.setMaximumSize(new Dimension(window.getWidth()/2, PANEL_HEIGHT * nPlayers));
 
         // create fields
         for (int i = 1; i <= nPlayers; i++) {
