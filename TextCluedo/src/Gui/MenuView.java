@@ -55,6 +55,13 @@ public class MenuView implements View {
         JPanel footerPanel = new JPanel(new FlowLayout());
         window.add(footerPanel);
         JButton doneButton = new JButton("Done");
+
+        // TODO: make this done button create the game properly
+        doneButton.addActionListener((ActionEvent e) -> {
+            new GameView(window, null, null);
+        });
+
+
         JButton exitButton = new JButton("Exit");
         footerPanel.add(doneButton);
         footerPanel.add(exitButton);

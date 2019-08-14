@@ -23,8 +23,6 @@ public class Window extends JPanel {
         frame.setResizable(false);
         frame.setVisible(true);
 
-        //setLayout(new BorderLayout());
-
         frame.add(this);
     }
 
