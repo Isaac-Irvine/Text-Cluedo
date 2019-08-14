@@ -32,4 +32,21 @@ public class Window extends JPanel {
     public void redraw() {
         frame.revalidate();
     }
+
+
+    /**
+     * Width of the window
+     * @return
+     */
+    public int getWidth() {
+        return frame.getWidth();
+    }
+
+    /**
+     * Height of the window
+     * @return
+     */
+    public int getHeight() {
+        return frame.getHeight();
+    }
 }
