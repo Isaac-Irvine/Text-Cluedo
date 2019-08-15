@@ -21,6 +21,7 @@ public class Window extends JPanel {
         frame.setSize(new Dimension(width, height));
         frame.setLayout(new BorderLayout());
         frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
         frame.add(this);

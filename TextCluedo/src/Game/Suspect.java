@@ -1,6 +1,8 @@
 package Game;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Represents a suspect on the board.
@@ -13,6 +15,7 @@ public class Suspect extends Entity {
 	/**
 	 * Create a new suspect object.
 	 * This adds it to the board too.
+	 *
 	 * @param board
 	 * @param x
 	 * @param y
@@ -27,6 +30,7 @@ public class Suspect extends Entity {
 	/**
 	 * The room you are currently in.
 	 * Could be null.
+	 *
 	 * @return
 	 */
 	public Room getCurrentRoom() {
@@ -37,7 +41,7 @@ public class Suspect extends Entity {
 	 * Get a set of available directions coming from the suspect.
 	 */
 	public Set<Cell.Direction> getAvaliableDirections(Set<Cell> visited) {
-		if( currentRoom != null) { // no avaliable directions if you are in a room
+		if (currentRoom != null) { // no avaliable directions if you are in a room
 			return new HashSet<>();
 		}
 		return getBoard().getAvailableNeighbours(getLocation(), visited);
@@ -48,16 +52,16 @@ public class Suspect extends Entity {
 	 * (Not blocked by players)
 	 */
 	public List<RoomEntranceCell> getAvaliableRoomExits() {
-		if( currentRoom == null) { // not in room
+		if (currentRoom == null) { // not in room
 			return new ArrayList<>();
 		}
 
 
 		List<RoomEntranceCell> cells = new ArrayList<>();
 
-		for(RoomEntranceCell cell : currentRoom.getRoomEntrances()) {
+		for (RoomEntranceCell cell : currentRoom.getRoomEntrances()) {
 			Cell exit = getBoard().getNeighbourCell(cell, cell.getDirection());
-			if(exit.isFree()) cells.add(cell); // check the exit isn't blocked
+			if (exit.isFree()) cells.add(cell); // check the exit isn't blocked
 		}
 
 		return cells;
@@ -70,9 +74,10 @@ public class Suspect extends Entity {
 		Cell neighbour = getBoard().getNeighbourCell(getLocation(), direction);
 
 		// check that the neighbour is a room.
-		if(neighbour instanceof RoomEntranceCell) {
+		if (neighbour instanceof RoomEntranceCell) {
 			RoomEntranceCell ent = (RoomEntranceCell) neighbour;
-			if(direction.reverse() != ent.getDirection()) throw new IllegalStateException("Cannot move into a room entrance from the wrong direction.");
+			if (direction.reverse() != ent.getDirection())
+				throw new IllegalStateException("Cannot move into a room entrance from the wrong direction.");
 
 			enterRoom(ent.getRoom());
 		}
@@ -81,6 +86,7 @@ public class Suspect extends Entity {
 		else {
 			moveTo(neighbour);
 		}
+
 	}
 
 	/**
@@ -94,11 +100,39 @@ public class Suspect extends Entity {
 
 	/**
 	 * Move into a room
+	 *
 	 * @param room
 	 */
-    public void enterRoom(Room room) {
+	public void enterRoom(Room room) {
 		currentRoom = room;
 		Cell cell = currentRoom.getAvailableCell();
 		moveTo(cell);
-    }
+	}
+
+	/**
+	 * Draw the suspect
+	 *
+	 * @param g        the graphics to draw to
+	 * @param x
+	 * @param y
+	 * @param cellSize
+	 */
+	@Override
+	public void draw(Graphics2D g, int x, int y, int cellSize) {
+		if (getChars()[0] == 'M' && getChars()[1] == 'S') {
+			g.setColor(Color.RED);
+		} else if (getChars()[0] == 'C' && getChars()[1] == 'M') {
+			g.setColor(Color.YELLOW);
+		} else if (getChars()[0] == 'M' && getChars()[1] == 'G') {
+			g.setColor(Color.GREEN);
+		} else if (getChars()[0] == 'M' && getChars()[1] == 'W') {
+			g.setColor(Color.LIGHT_GRAY);
+		} else if (getChars()[0] == 'M' && getChars()[1] == 'P') {
+			g.setColor(Color.BLUE);
+		} else if (getChars()[0] == 'P' && getChars()[1] == 'P') {
+			g.setColor(Color.MAGENTA);
+		}
+
+		g.fillOval(x, y, cellSize, cellSize);
+	}
 }

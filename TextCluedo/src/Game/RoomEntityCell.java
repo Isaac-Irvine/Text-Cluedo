@@ -1,5 +1,7 @@
 package Game;
 
+import java.awt.*;
+
 /**
  * Cells in the room where entities can appear
  */
@@ -26,5 +28,11 @@ public class RoomEntityCell extends Cell {
      */
     public Room getRoom() {
         return room;
+    }
+
+    @Override
+    public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+        g.setColor(Color.YELLOW);
+        g.fillRect(x, y, cellSize, cellSize);
     }
 }

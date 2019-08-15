@@ -7,12 +7,17 @@ import java.util.*;
  * Has an ID, a suspect that they control and a list of cards.
  */
 public class Player {
+    public enum PlayerState {
+        WAITING, MOVING, FINISHED, NOT_TURN
+    }
+
     private int num;
     private Game game;
     private Suspect suspect;
     private Scanner scanner;
     private boolean hasAccused;
     private List<Card> cards;
+    private PlayerState currentState;
 
     /**
      * Initialize a player object
@@ -28,6 +33,7 @@ public class Player {
         this.scanner = scanner;
         this.suspect = suspect;
         this.hasAccused = false;
+        this.currentState = PlayerState.NOT_TURN;
         cards = new ArrayList<>();
     }
 
@@ -44,7 +50,7 @@ public class Player {
     /**
      * Have your turn
      */
-    public void turn() {
+    /*public void turn() {
 
         boolean hasMoved = false;
         boolean finishedTurn = false;
@@ -95,6 +101,13 @@ public class Player {
                 finishedTurn = true;
             }
         }
+    }*/
+
+    /**
+     * Have your turn
+     */
+    public void turn() {
+        currentState = PlayerState.WAITING;
     }
 
     /**

@@ -32,13 +32,14 @@ public class Game {
 
 	private Card murderer, weapon, room;
 
+
 	/**
-	 * Initialize a new game
+	 * Initialize a new game from the menu view
 	 *
 	 * @param nPlayers
 	 */
-	public Game(int nPlayers) {
-		if (nPlayers > allSuspects.length || nPlayers < 3)
+	public Game(List<String> characters) {
+		if (characters.size() > allSuspects.length || characters.size() < 3)
 			throw new IllegalArgumentException("Invalid number of players.");
 
 
@@ -86,33 +87,8 @@ public class Game {
 		List<String> charactersLeft = new ArrayList<>(Arrays.asList(allSuspects));
 
 		// add all players
-		for (int p = 1; p <= nPlayers; p++) {
-			System.out.print("\nPlayer " + p + ", please pick your character\n[");
-			for (int i = 0; i < charactersLeft.size(); i++) {
-				System.out.print(i + ": " + charactersLeft.get(i));
-				if (i != charactersLeft.size() - 1) System.out.print(", ");
-			}
-			System.out.print("]: ");
-
-			//get the picked option
-			String picked;
-			while (true) {
-				picked = scan.nextLine().toLowerCase();
-				if (suspectAliases.containsKey(picked)) {
-					break;
-				}
-				try {
-					int num = Integer.parseInt(picked);
-					if (num >= 0 && num < charactersLeft.size()) {
-						picked = charactersLeft.get(num);
-						break;
-					}
-				} catch (NumberFormatException e) {
-				}
-				System.out.print("Sorry, that is not one of the characters you can pick. Enter again: ");
-			}
-
-			int index = suspectAliases.get(picked.toLowerCase());
+		for (int p = 1; p <= characters.size(); p++) {
+			int index = suspectAliases.get(characters.get(p-1).toLowerCase());
 
 			// add the player
 			Player player = new Player(this, scan, p, board.getSuspect(index));
@@ -123,13 +99,10 @@ public class Game {
 		// give cards to players
 		Collections.shuffle(playerCards);
 
-		for (int i = 0, p = 0; i < playerCards.size(); i++, p++, p %= nPlayers) {
+		for (int i = 0, p = 0; i < playerCards.size(); i++, p++, p %= characters.size()) {
 			Player player = players.get(p);
 			player.addCard(playerCards.get(i));
 		}
-
-		// run the game loop
-		run();
 	}
 
 	/**
@@ -324,5 +297,22 @@ public class Game {
 				System.out.print("Invalid option, Enter again: ");
 			}
 		}
+	}
+
+	/**
+	 * Get the board
+	 * @return
+	 */
+	public Board getBoard() {
+		return board;
+	}
+
+	/**
+	 * Get player object from index
+	 * @param index
+	 * @return
+	 */
+	public Player getPlayer(int index) {
+		return players.get(index);
 	}
 }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Represents the
  */
-public class MenuView implements View {
+public class MenuView {
     private static final int PANEL_HEIGHT = 40;
 
     private Window window;
@@ -25,7 +25,7 @@ public class MenuView implements View {
      * Create a menu view
      */
     public MenuView() {
-        window = new Window("Pick players", 640, 480);
+        window = new Window("Pick players", 800, 600);
         window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
         window.add(Box.createRigidArea(new Dimension(window.getWidth(), (window.getHeight() - PANEL_HEIGHT * 8) / 2)));
 
@@ -60,9 +60,11 @@ public class MenuView implements View {
         window.add(footerPanel);
         JButton doneButton = new JButton("Done");
 
-        // TODO: make this done button create the game properly
         doneButton.addActionListener((ActionEvent e) -> {
-            new GameView(window, null, null);
+            List<String> characterStrings = new ArrayList<>();
+            for(JComboBox comboBox : playerCharacters) characterStrings.add((String) comboBox.getSelectedItem());
+            Game game = new Game(characterStrings);
+            new GameView(window, game, game.getPlayer(0));
         });
 
 
