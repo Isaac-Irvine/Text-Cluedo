@@ -7,56 +7,56 @@ import java.util.*;
  * Has an ID, a suspect that they control and a list of cards.
  */
 public class Player {
-    public enum PlayerState {
-        WAITING, MOVING, FINISHED, NOT_TURN
-    }
+	public enum PlayerState {
+		WAITING, MOVING, FINISHED, NOT_TURN
+	}
 
-    private int num;
-    private Game game;
-    private Suspect suspect;
-    private Scanner scanner;
-    private boolean hasAccused;
-    private List<Card> cards;
-    private PlayerState currentState;
+	private int num;
+	private Game game;
+	private Suspect suspect;
+	private Scanner scanner;
+	private boolean hasAccused;
+	private List<Card> cards;
+	private PlayerState currentState;
 
-    /**
-     * Initialize a player object
-     *
-     * @param game
-     * @param scanner the scanner for input. Use System.in for user-input
-     * @param num
-     * @param suspect
-     */
-    public Player(Game game, Scanner scanner, int num, Suspect suspect) {
-        this.game = game;
-        this.num = num;
-        this.scanner = scanner;
-        this.suspect = suspect;
-        this.hasAccused = false;
-        this.currentState = PlayerState.NOT_TURN;
-        cards = new ArrayList<>();
-    }
+	/**
+	 * Initialize a player object
+	 *
+	 * @param game
+	 * @param scanner the scanner for input. Use System.in for user-input
+	 * @param num
+	 * @param suspect
+	 */
+	public Player(Game game, Scanner scanner, int num, Suspect suspect) {
+		this.game = game;
+		this.num = num;
+		this.scanner = scanner;
+		this.suspect = suspect;
+		this.hasAccused = false;
+		this.currentState = PlayerState.NOT_TURN;
+		cards = new ArrayList<>();
+	}
 
-    /**
-     * Add a card to your hand
-     *
-     * @param card
-     */
-    public void addCard(Card card) {
-        cards.add(card);
-    }
+	/**
+	 * Add a card to your hand
+	 *
+	 * @param card
+	 */
+	public void addCard(Card card) {
+		cards.add(card);
+	}
 
 
-    /**
-     * Get a list of cards
-     */
-    public List<Card> getCards() {
-        return Collections.unmodifiableList(cards);
-    }
+	/**
+	 * Get a list of cards
+	 */
+	public List<Card> getCards() {
+		return Collections.unmodifiableList(cards);
+	}
 
-    /**
-     * Have your turn
-     */
+	/**
+	 * Have your turn
+	 */
     /*public void turn() {
 
         boolean hasMoved = false;
@@ -110,190 +110,212 @@ public class Player {
         }
     }*/
 
-    /**
-     * Have your turn
-     */
-    public void turn() {
-        currentState = PlayerState.WAITING;
-    }
+	/**
+	 * Have your turn
+	 */
+	public void turn() {
+		currentState = PlayerState.WAITING;
+	}
 
-    /**
-     * Has accused
-     *
-     * @return
-     */
-    public boolean hasAccused() {
-        return hasAccused;
-    }
+	/**
+	 * Roll the dice
+	 */
+	public void rollDice() {
+		if (currentState != PlayerState.WAITING) return;
 
-    /**
-     * Make an accusation
-     */
-    public void accuse() {
-        hasAccused = true;
+		currentState = PlayerState.MOVING;
+		int diceRoll = (int) (Math.random() * 6) + (int) (Math.random() * 6) + 2;
+		move(diceRoll);
+		currentState = PlayerState.FINISHED;
+	}
 
-        System.out.println("\nPick the circumstances of the murder correctly to win the game. Guess incorrectly and you will be out.\n");
+	/**
+	 * Finish turn
+	 */
+	public void finishTurn() {
+		if (currentState != PlayerState.WAITING) return;
 
-        Card suspect = Game.getSuspectInput(scanner);
+		currentState = PlayerState.NOT_TURN;
+		game.nextPlayer();
+	}
 
-        System.out.println();
+	/**
+	 * Has accused
+	 *
+	 * @return
+	 */
+	public boolean hasAccused() {
+		return hasAccused;
+	}
 
-        Card weapon = Game.getWeaponInput(scanner);
+	/**
+	 * Make an accusation
+	 */
+	public void accuse() {
+		hasAccused = true;
 
-        System.out.println();
+		System.out.println("\nPick the circumstances of the murder correctly to win the game. Guess incorrectly and you will be out.\n");
 
-        Card room = Game.getRoomInput(scanner);
+		Card suspect = Game.getSuspectInput(scanner);
 
-        game.checkAccusation(this, suspect, weapon, room);
-    }
+		System.out.println();
 
-    /**
-     * Make a suggestion within a room
-     */
-    public void suggest() {
-        if (suspect.getCurrentRoom() == null) throw new IllegalStateException("Cannot suggest if not in a room.");
+		Card weapon = Game.getWeaponInput(scanner);
 
-        System.out.println("\nPick the circumstances of the murder.\n");
+		System.out.println();
 
-        Card otherSuspectCard = Game.getSuspectInput(scanner);
-        Suspect otherSuspect = null;
-        for (int i = 0; i < Game.allSuspects.length; i++) {
-            if (otherSuspectCard.getName().equals(Game.allSuspects[i]))
-                otherSuspect = suspect.getBoard().getSuspect(i);
-        }
-        if (otherSuspect == null) {
-            throw new Error("Cant find that suspect in allSuspects");
-        }
+		Card room = Game.getRoomInput(scanner);
 
-        System.out.println();
+		game.checkAccusation(this, suspect, weapon, room);
+	}
 
-        Card weaponCard = Game.getWeaponInput(scanner);
-        Weapon weapon = null;
-        for (int i = 0; i < Game.allSuspects.length; i++) {
-            if (weaponCard.getName().equals(Game.allWeapons[i]))
-                weapon = suspect.getBoard().getWeapon(i);
-        }
-        if (weapon == null) {
-            throw new Error("Cant find that suspect in allWeapons");
-        }
+	/**
+	 * Make a suggestion within a room
+	 */
+	public void suggest() {
+		if (suspect.getCurrentRoom() == null) throw new IllegalStateException("Cannot suggest if not in a room.");
 
-        otherSuspect.enterRoom(suspect.getCurrentRoom());
-        weapon.moveTo(suspect.getCurrentRoom().getAvailableCell());
+		System.out.println("\nPick the circumstances of the murder.\n");
 
-        Card roomCard = new Card(suspect.getCurrentRoom().getName(), Card.CardType.ROOM);
+		Card otherSuspectCard = Game.getSuspectInput(scanner);
+		Suspect otherSuspect = null;
+		for (int i = 0; i < Game.allSuspects.length; i++) {
+			if (otherSuspectCard.getName().equals(Game.allSuspects[i]))
+				otherSuspect = suspect.getBoard().getSuspect(i);
+		}
+		if (otherSuspect == null) {
+			throw new Error("Cant find that suspect in allSuspects");
+		}
 
-        game.checkSuggestion( otherSuspectCard, weaponCard, roomCard);
-    }
+		System.out.println();
 
-    /**
-     * Let the player move a number of steps
-     *
-     * @param nSteps
-     */
-    public void move(int nSteps) {
-        if (game != null) System.out.println("\nDice roll: " + nSteps);
-        Set<Cell> visited = new HashSet<>();
+		Card weaponCard = Game.getWeaponInput(scanner);
+		Weapon weapon = null;
+		for (int i = 0; i < Game.allSuspects.length; i++) {
+			if (weaponCard.getName().equals(Game.allWeapons[i]))
+				weapon = suspect.getBoard().getWeapon(i);
+		}
+		if (weapon == null) {
+			throw new Error("Cant find that suspect in allWeapons");
+		}
 
-        while (nSteps > 0) {
-            if (game != null) game.draw();
+		otherSuspect.enterRoom(suspect.getCurrentRoom());
+		weapon.moveTo(suspect.getCurrentRoom().getAvailableCell());
 
-            // regular move through free spaces
-            if (suspect.getCurrentRoom() == null) {
-                // get available directions
-                Set<Cell.Direction> directions = suspect.getAvaliableDirections(visited);
+		Card roomCard = new Card(suspect.getCurrentRoom().getName(), Card.CardType.ROOM);
 
-                if (directions.size() == 0) {
-                    if (game != null) System.out.println("You are unable to move further.");
-                    break;
-                }
-                if (game != null) System.out.println("Moves left: " + nSteps);
+		game.checkSuggestion(otherSuspectCard, weaponCard, roomCard);
+	}
 
-                if (game != null) System.out.println("\nAvailable Directions: " + directions);
-                if (game != null) System.out.print("Enter direction: ");
+	/**
+	 * Let the player move a number of steps
+	 *
+	 * @param nSteps
+	 */
+	public void move(int nSteps) {
+		if (game != null) System.out.println("\nDice roll: " + nSteps);
+		Set<Cell> visited = new HashSet<>();
 
-                // get choice
-                Cell.Direction direction = Cell.Direction.getDirection(scanner.nextLine());
+		while (nSteps > 0) {
+			if (game != null) game.draw();
 
-                while (direction == null || !directions.contains(direction)) {
-                    if (game != null) System.out.print("Invalid Direction, Enter again: ");
-                    direction = Cell.Direction.getDirection(scanner.nextLine());
-                }
+			// regular move through free spaces
+			if (suspect.getCurrentRoom() == null) {
+				// get available directions
+				Set<Cell.Direction> directions = suspect.getAvaliableDirections(visited);
 
-                // move
-                visited.add(suspect.getLocation());
-                suspect.move(direction);
+				if (directions.size() == 0) {
+					if (game != null) System.out.println("You are unable to move further.");
+					break;
+				}
+				if (game != null) System.out.println("Moves left: " + nSteps);
 
-                // stop moving if you reach a room
-                if (suspect.getCurrentRoom() != null) {
-                    break;
-                }
-            }
-            // exit a room
-            else {
-                List<RoomEntranceCell> cellList = suspect.getAvaliableRoomExits();
+				if (game != null) System.out.println("\nAvailable Directions: " + directions);
+				if (game != null) System.out.print("Enter direction: ");
 
-                if (cellList.size() == 0) {
-                    if (game != null) System.out.println("You are unable to exit the room as all exits are blocked.");
-                    break;
-                }
+				// get choice
+				Cell.Direction direction = Cell.Direction.getDirection(scanner.nextLine());
 
-                // get the list of options to pick as a string
-                List<String> options = new ArrayList<>();
+				while (direction == null || !directions.contains(direction)) {
+					if (game != null) System.out.print("Invalid Direction, Enter again: ");
+					direction = Cell.Direction.getDirection(scanner.nextLine());
+				}
 
-                Cell.Direction previousDir = null;
-                int doorCount = 0;
+				// move
+				visited.add(suspect.getLocation());
+				suspect.move(direction);
 
-                for (RoomEntranceCell cell : cellList) {
-                    // multiple doors with the same direction - add a number to the end
-                    if (previousDir == cell.getDirection()) {
-                        doorCount++;
-                        options.add(options.size() + ": " + cell.getDirection() + " DOOR " + doorCount);
-                    } else {
-                        doorCount = 1;
-                        previousDir = cell.getDirection();
-                        options.add(options.size() + ": " + cell.getDirection() + " DOOR");
-                    }
+				// stop moving if you reach a room
+				if (suspect.getCurrentRoom() != null) {
+					break;
+				}
+			}
+			// exit a room
+			else {
+				List<RoomEntranceCell> cellList = suspect.getAvaliableRoomExits();
 
-                }
-                if (game != null) System.out.println("Moves left: " + nSteps);
+				if (cellList.size() == 0) {
+					if (game != null) System.out.println("You are unable to exit the room as all exits are blocked.");
+					break;
+				}
 
-                if (game != null) System.out.println("\nAvailable Exits: " + options);
-                if (game != null) System.out.print("Enter the number corresponding to the door you want to exit: ");
+				// get the list of options to pick as a string
+				List<String> options = new ArrayList<>();
 
-                // get choice
-                int choice = Game.getNumberInput(scanner, 0, cellList.size() - 1);
+				Cell.Direction previousDir = null;
+				int doorCount = 0;
 
-                // move
-                RoomEntranceCell exit = cellList.get(choice);
+				for (RoomEntranceCell cell : cellList) {
+					// multiple doors with the same direction - add a number to the end
+					if (previousDir == cell.getDirection()) {
+						doorCount++;
+						options.add(options.size() + ": " + cell.getDirection() + " DOOR " + doorCount);
+					} else {
+						doorCount = 1;
+						previousDir = cell.getDirection();
+						options.add(options.size() + ": " + cell.getDirection() + " DOOR");
+					}
 
-                visited.add(exit);
-                suspect.exitRoom(exit);
-            }
+				}
+				if (game != null) System.out.println("Moves left: " + nSteps);
 
-            nSteps--;
-        }
+				if (game != null) System.out.println("\nAvailable Exits: " + options);
+				if (game != null) System.out.print("Enter the number corresponding to the door you want to exit: ");
 
-        if (game != null) game.draw();
-        if (game != null) System.out.println("Movement finished.");
-    }
+				// get choice
+				int choice = Game.getNumberInput(scanner, 0, cellList.size() - 1);
 
-    /**
-     * If the player has a card
-     *
-     * @param card
-     * @return
-     */
-    public boolean hasCard(Card card) {
-        return cards.contains(card);
-    }
+				// move
+				RoomEntranceCell exit = cellList.get(choice);
+
+				visited.add(exit);
+				suspect.exitRoom(exit);
+			}
+
+			nSteps--;
+		}
+
+		if (game != null) game.draw();
+		if (game != null) System.out.println("Movement finished.");
+	}
+
+	/**
+	 * If the player has a card
+	 *
+	 * @param card
+	 * @return
+	 */
+	public boolean hasCard(Card card) {
+		return cards.contains(card);
+	}
 
 
-    /**
-     * Game.Player string.
-     *
-     * @return
-     */
-    public String toString() {
-        return "Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
-    }
+	/**
+	 * Game.Player string.
+	 *
+	 * @return
+	 */
+	public String toString() {
+		return "Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
+	}
 }

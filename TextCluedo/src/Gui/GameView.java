@@ -4,6 +4,7 @@ import Game.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * The entire game view
@@ -43,8 +44,24 @@ public class GameView extends Canvas {
 
 		// button panel
 		JPanel buttonPanel = new JPanel(new FlowLayout());
-		buttonPanel.add(new JButton("Roll Dice"));
-		buttonPanel.add(new JButton("Accuse"));
+
+		JButton rollDice = new JButton("Roll Dice");
+		rollDice.addActionListener((ActionEvent e) -> {
+			player.rollDice();
+			repaint();
+		});
+		buttonPanel.add(rollDice);
+
+		JButton finishTurn = new JButton("Finish Turn");
+		finishTurn.addActionListener((ActionEvent e) -> {
+			player.finishTurn();
+			repaint();
+		});
+		buttonPanel.add(finishTurn);
+
+		JButton accuse = new JButton("Accuse");
+		buttonPanel.add(accuse);
+
 		buttonPanel.setSize(new Dimension(window.getWidth(), footerSize));
 		window.add(buttonPanel);
 
@@ -73,9 +90,5 @@ public class GameView extends Canvas {
 				cell.draw((Graphics2D) g, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
 			}
 		}
-
-		g.dispose();
-
-		window.redraw();
 	}
 }

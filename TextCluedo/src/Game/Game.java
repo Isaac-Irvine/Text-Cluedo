@@ -22,12 +22,29 @@ public class Game {
 
 	// easy way to look up the index of a suspect in the array. Contains some aliases
 	public static final Map<String, Integer> suspectAliases = new HashMap<String, Integer>() {{
-		put("miss scarlett", 0); put("scarlett", 0); put("ms", 0);
-		put("col mustard", 1); put("col. mustard", 1); put("mustard", 1); put("cm", 1);
-		put("mrs. white", 2); put("mrs white", 2); put("white", 2); put("mw", 2);
-		put("mr. green", 3);put("mr green", 3);put("green", 3);put("mg", 3);
-		put("mrs. peacock", 4); put("mrs peacock", 4); put("peacock", 4); put("mp", 4);
-		put("prof. plum", 5); put("prof plum", 5); put("plum", 5); put("pp", 5);
+		put("miss scarlett", 0);
+		put("scarlett", 0);
+		put("ms", 0);
+		put("col mustard", 1);
+		put("col. mustard", 1);
+		put("mustard", 1);
+		put("cm", 1);
+		put("mrs. white", 2);
+		put("mrs white", 2);
+		put("white", 2);
+		put("mw", 2);
+		put("mr. green", 3);
+		put("mr green", 3);
+		put("green", 3);
+		put("mg", 3);
+		put("mrs. peacock", 4);
+		put("mrs peacock", 4);
+		put("peacock", 4);
+		put("mp", 4);
+		put("prof. plum", 5);
+		put("prof plum", 5);
+		put("plum", 5);
+		put("pp", 5);
 	}};
 
 	private Card murderer, weapon, room;
@@ -36,7 +53,7 @@ public class Game {
 	/**
 	 * Initialize a new game from the menu view
 	 *
-	 * @param nPlayers
+	 * @param characters
 	 */
 	public Game(List<String> characters) {
 		if (characters.size() > allSuspects.length || characters.size() < 3)
@@ -88,7 +105,7 @@ public class Game {
 
 		// add all players
 		for (int p = 1; p <= characters.size(); p++) {
-			int index = suspectAliases.get(characters.get(p-1).toLowerCase());
+			int index = suspectAliases.get(characters.get(p - 1).toLowerCase());
 
 			// add the player
 			Player player = new Player(this, scan, p, board.getSuspect(index));
@@ -103,13 +120,15 @@ public class Game {
 			Player player = players.get(p);
 			player.addCard(playerCards.get(i));
 		}
+
+		players.get(0).turn();
 	}
 
 	/**
 	 * Run the game loop
 	 */
 	public void run() {
-		while(!gameOver) {
+		while (!gameOver) {
 			draw();
 			Player player = players.get(currentTurn);
 
@@ -135,12 +154,12 @@ public class Game {
 	 * Check if an accusation is correct for a given player
 	 */
 	public void checkAccusation(Player player, Card suspect, Card weapon, Card room) {
-		if(suspect.equals(this.murderer) && weapon.equals(this.weapon) && room.equals(this.room)) {
+		if (suspect.equals(this.murderer) && weapon.equals(this.weapon) && room.equals(this.room)) {
 			endGame(player);
 		} else {
 			incorrectGuesses++;
 			System.out.println("\n" + player + " has accused incorrectly, so is out of the game!");
-			if(incorrectGuesses == players.size()) endGame(null);
+			if (incorrectGuesses == players.size()) endGame(null);
 		}
 	}
 
@@ -168,8 +187,7 @@ public class Game {
 			if (refutedCards.size() == 0) {
 				// player does not have that card
 				System.out.println(player + " has none of the suggested cards.");
-			}
-			else {
+			} else {
 				// found a player with one of those cards.
 				System.out.println(player + ", you have at least one of the suggested cards. Pick one to refute to " + currentPlayer);
 
@@ -199,10 +217,12 @@ public class Game {
 
 	/**
 	 * End the game by printing the winner and the murder circumstances
+	 *
 	 * @param correctGuess non-null will imply this person has won the game.
 	 */
 	public void endGame(Player correctGuess) {
-		if(correctGuess != null) System.out.println("\n" + correctGuess + " has accused correctly and has won the game!");
+		if (correctGuess != null)
+			System.out.println("\n" + correctGuess + " has accused correctly and has won the game!");
 		else System.out.println("\nNo one managed to accuse the murder correctly, so the game is over.");
 		System.out.println("\nMurderer: " + murderer.getName());
 		System.out.println("Weapon: " + weapon.getName());
@@ -213,6 +233,7 @@ public class Game {
 
 	/**
 	 * Get suspect card input
+	 *
 	 * @param scanner
 	 * @return
 	 */
@@ -228,13 +249,14 @@ public class Game {
 		int index = getNumberInput(scanner, 0, allSuspects.length - 1);
 
 		String name = allSuspects[index];
-		Card card = new Card(name,Card.CardType.SUSPECT);
+		Card card = new Card(name, Card.CardType.SUSPECT);
 
 		return card;
 	}
 
 	/**
 	 * Get weapon card input
+	 *
 	 * @param scanner
 	 * @return
 	 */
@@ -250,13 +272,14 @@ public class Game {
 		int index = getNumberInput(scanner, 0, allWeapons.length - 1);
 
 		String name = allWeapons[index];
-		Card card = new Card(name,Card.CardType.WEAPON);
+		Card card = new Card(name, Card.CardType.WEAPON);
 
 		return card;
 	}
 
 	/**
 	 * Get weapon card input
+	 *
 	 * @param scanner
 	 * @return
 	 */
@@ -272,13 +295,14 @@ public class Game {
 		int index = getNumberInput(scanner, 0, allRooms.length - 1);
 
 		String name = allRooms[index];
-		Card card = new Card(name,Card.CardType.ROOM);
+		Card card = new Card(name, Card.CardType.ROOM);
 
 		return card;
 	}
 
 	/**
 	 * Get a number input
+	 *
 	 * @return
 	 */
 	public static int getNumberInput(Scanner scanner, int min, int max) {
@@ -301,6 +325,7 @@ public class Game {
 
 	/**
 	 * Get the board
+	 *
 	 * @return
 	 */
 	public Board getBoard() {
@@ -309,10 +334,27 @@ public class Game {
 
 	/**
 	 * Get player object from index
+	 *
 	 * @param index
 	 * @return
 	 */
 	public Player getPlayer(int index) {
 		return players.get(index);
+	}
+
+	/**
+	 * Move to the next player
+	 */
+	public void nextPlayer() {
+
+		currentTurn++;
+		currentTurn %= players.size();
+
+		Player player = players.get(currentTurn);
+
+		if (!player.hasAccused()) {
+			player.turn();
+		} else nextPlayer();
+
 	}
 }
