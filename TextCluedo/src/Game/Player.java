@@ -48,6 +48,13 @@ public class Player {
 
 
     /**
+     * Get a list of cards
+     */
+    public List<Card> getCards() {
+        return Collections.unmodifiableList(cards);
+    }
+
+    /**
      * Have your turn
      */
     /*public void turn() {

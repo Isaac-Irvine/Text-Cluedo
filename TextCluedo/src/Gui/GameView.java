@@ -17,18 +17,16 @@ public class GameView extends Canvas {
 
 	private Game game;
 	private Window window;
-	private Player currentPlayer;
+	private Player player;
 	private GameController controller;
 
 	/**
-	 * Create the game view
-	 *
-	 * @param window
+	 * Create a game view for a player
 	 */
-	public GameView(Window window, Game game, Player player) {
+	public GameView(Game game, Player player) {
 		this.game = game;
-		this.window = window;
-		this.currentPlayer = player;
+		this.window = new Window(player.toString(), 800, 600);
+		this.player = player;
 		this.controller = new GameController(this);
 
 		window.removeAll();
@@ -52,21 +50,18 @@ public class GameView extends Canvas {
 
 		// card panel
 		JPanel cardPanel = new JPanel(new FlowLayout());
-		cardPanel.add(new JButton("Card1"));
-		cardPanel.add(new JButton("Card2"));
+		for (Card card : player.getCards()) {
+			cardPanel.add(new JButton(card.toString()));
+		}
 		cardPanel.setSize(new Dimension(window.getWidth(), footerSize));
 		window.add(cardPanel);
 
-
 		window.redraw();
-
-
-
 	}
 
 	/**
 	 * Draw the current state of the board
-	 *
+	 * <p>
 	 * TODO: Improve the drawing to include images.
 	 */
 	public void paint(Graphics g) {
