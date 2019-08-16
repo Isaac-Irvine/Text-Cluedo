@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
  * The entire game view
  */
 public class GameView extends Canvas {
-	private static final int CELL_SIZE = 18;
+	private static final int CELL_SIZE = 16;
 	private static final int GAME_WIDTH = 26;
 	private static final int GAME_HEIGHT = 27;
 	private static final int CANVAS_WIDTH = GAME_WIDTH * CELL_SIZE;
@@ -36,11 +36,17 @@ public class GameView extends Canvas {
 		window.removeAll();
 		window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
 
+
 		// create game canvas
 		setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 		setMaximumSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 		addMouseListener(controller);
 		window.add(this);
+
+        // key listener
+        setFocusable(true);
+        requestFocus();
+        addKeyListener(controller);
 
 		// footer panel sizes
 		int footerSize = (window.getHeight() - CANVAS_HEIGHT) / 2;
@@ -66,6 +72,7 @@ public class GameView extends Canvas {
 	    buttonPanel.removeAll();
 
         JButton rollDice = new JButton("Roll Dice");
+        rollDice.setFocusable(false);
         rollDice.addActionListener((ActionEvent e) -> {
             currentPlayer.rollDice();
             repaint();
@@ -73,6 +80,7 @@ public class GameView extends Canvas {
         buttonPanel.add(rollDice);
 
         JButton finishTurn = new JButton("Finish Turn");
+        finishTurn.setFocusable(false);
         finishTurn.addActionListener((ActionEvent e) -> {
             currentPlayer.finishTurn();
             repaint();
@@ -80,6 +88,7 @@ public class GameView extends Canvas {
         buttonPanel.add(finishTurn);
 
         JButton accuse = new JButton("Accuse");
+        accuse.setFocusable(false);
         buttonPanel.add(accuse);
 
         window.redraw();
@@ -97,7 +106,8 @@ public class GameView extends Canvas {
 	    // update the cards
 	    cardPanel.removeAll();
         for (Card card : newPlayer.getCards()) {
-            cardPanel.add(new JButton(card.toString()));
+            JLabel c = new JLabel(card.toString());
+            cardPanel.add(c);
         }
 
         window.redraw();
@@ -118,4 +128,12 @@ public class GameView extends Canvas {
 			}
 		}
 	}
+
+    /**
+     * Get the current player
+     * @return
+     */
+    public Player getPlayer() {
+	    return currentPlayer;
+    }
 }

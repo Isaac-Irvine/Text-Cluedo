@@ -370,4 +370,12 @@ public class Game {
 		} else nextPlayer();
 
 	}
+
+	/**
+	 * the game view
+	 * @return
+	 */
+	public GameView getGameView() {
+		return gameView;
+	}
 }

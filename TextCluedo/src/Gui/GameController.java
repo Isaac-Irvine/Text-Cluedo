@@ -1,13 +1,19 @@
 package Gui;
 
+import Game.Cell;
+
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import static java.awt.event.KeyEvent.*;
 
 /**
  * The controller for a game
  * Handles various listeners and key presses
  */
-public class GameController implements MouseListener {
+public class GameController implements MouseListener, KeyListener {
 	private GameView view;
 
 	/**
@@ -61,4 +67,40 @@ public class GameController implements MouseListener {
 	 */
 	@Override
 	public void mouseExited(MouseEvent event) {}
+
+	/**
+	 * Key typed on screen
+	 * @param e
+	 */
+	@Override
+	public void keyTyped(KeyEvent e) {}
+
+	/**
+	 * Key pressed on screen
+	 * @param e
+	 */
+	@Override
+	public void keyPressed(KeyEvent e) {
+		switch(e.getKeyCode()) {
+			case VK_W: case VK_UP:
+				view.getPlayer().move(Cell.Direction.UP);
+				break;
+			case VK_A: case VK_LEFT:
+				view.getPlayer().move(Cell.Direction.LEFT);
+				break;
+			case VK_S: case VK_DOWN:
+				view.getPlayer().move(Cell.Direction.DOWN);
+				break;
+			case VK_D: case VK_RIGHT:
+				view.getPlayer().move(Cell.Direction.RIGHT);
+				break;
+		}
+	}
+
+	/**
+	 * Key released on screen
+	 * @param e
+	 */
+	@Override
+	public void keyReleased(KeyEvent e) {}
 }
