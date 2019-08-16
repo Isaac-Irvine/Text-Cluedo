@@ -32,7 +32,7 @@ public class RoomEntityCell extends Cell {
 
     @Override
     public void drawCell(Graphics2D g, int x, int y, int cellSize) {
-        g.setColor(Color.YELLOW);
+        g.setColor(Color.WHITE);
         g.fillRect(x, y, cellSize, cellSize);
     }
 }

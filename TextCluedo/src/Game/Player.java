@@ -1,5 +1,7 @@
 package Game;
 
+import Gui.Dice;
+
 import java.util.*;
 
 /**
@@ -68,6 +70,14 @@ public class Player {
     }
 
     /**
+     * Get suspect
+     * @return
+     */
+    public Suspect getSuspect() {
+        return suspect;
+    }
+
+    /**
      * Have your turn
      */
     /*public void turn() {
@@ -133,18 +143,16 @@ public class Player {
     /**
      * Roll the dice
      */
-    public int rollDice() {
-        if (currentState != PlayerState.WAITING) return 0;
+    public void rollDice(Dice dice) {
+        if (currentState != PlayerState.WAITING) return;
 
         currentState = PlayerState.MOVING;
-        int diceRoll = (int) (Math.random() * 6) + (int) (Math.random() * 6) + 2;
+        dice.roll();
 
-        this.movesLeft = diceRoll;
+        this.movesLeft = dice.getValue();
         visitedCells = new HashSet<>();
 
         game.getGameView().updatePlayerState();
-
-        return diceRoll;
     }
 
     /**
