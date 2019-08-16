@@ -155,4 +155,13 @@ public abstract class Cell {
 	 * @param cellSize
 	 */
 	public abstract void drawCell(Graphics2D g, int x, int y, int cellSize);
+
+
+    /**
+     * For testing
+     * @return
+     */
+	public String toString() {
+        return getClass().getName() + " at " + x + "," + y;
+    }
 }

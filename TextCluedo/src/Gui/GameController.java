@@ -14,93 +14,114 @@ import static java.awt.event.KeyEvent.*;
  * Handles various listeners and key presses
  */
 public class GameController implements MouseListener, KeyListener {
-	private GameView view;
+    private GameView view;
 
-	/**
-	 * Init game controller
-	 * @param view
-	 */
-	public GameController(GameView view) {
-		this.view = view;
-	}
+    /**
+     * Init game controller
+     *
+     * @param view
+     */
+    public GameController(GameView view) {
+        this.view = view;
+    }
 
-	/**
-	 * Click on canvas
-	 * @param event
-	 */
-	@Override
-	public void mouseClicked(MouseEvent event) {
-		if(event.getButton() != MouseEvent.BUTTON1) return;
-		System.out.println("CLICK AT " + event.getX() + "," + event.getY());
-	}
+    /**
+     * Click on canvas - move to a given cell
+     *
+     * @param event
+     */
+    @Override
+    public void mouseClicked(MouseEvent event) {
+        if (event.getButton() != MouseEvent.BUTTON1) return;
 
-	/**
-	 * Press on canvas
-	 * @param event
-	 */
-	@Override
-	public void mousePressed(MouseEvent event) {
-		if(event.getButton() != MouseEvent.BUTTON1) return;
-		//System.out.println("PRESS AT " + event.getX() + "," + event.getY());
-	}
+        int cellX = event.getX() / GameView.CELL_SIZE;
+        int cellY = event.getY() / GameView.CELL_SIZE;
 
-	/**
-	 * Release on canvas
-	 * @param event
-	 */
-	@Override
-	public void mouseReleased(MouseEvent event) {
-		if(event.getButton() != MouseEvent.BUTTON1) return;
-		//System.out.println("RELEASE AT " + event.getX() + "," + event.getY());
-	}
+        Cell cell = view.getGame().getBoard().getCell(cellX, cellY);
 
-	/**
-	 * Mouse enter canvas
-	 * @param event
-	 */
-	@Override
-	public void mouseEntered(MouseEvent event) {}
+        if (cell != null) {
+			view.getPlayer().move(cell);
+        }
+    }
 
-	/**
-	 * Mouse exit canvas
-	 * @param event
-	 */
-	@Override
-	public void mouseExited(MouseEvent event) {}
+    /**
+     * Key pressed on screen
+     *
+     * @param e
+     */
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case VK_W:
+            case VK_UP:
+                view.getPlayer().move(Cell.Direction.UP);
+                break;
+            case VK_A:
+            case VK_LEFT:
+                view.getPlayer().move(Cell.Direction.LEFT);
+                break;
+            case VK_S:
+            case VK_DOWN:
+                view.getPlayer().move(Cell.Direction.DOWN);
+                break;
+            case VK_D:
+            case VK_RIGHT:
+                view.getPlayer().move(Cell.Direction.RIGHT);
+                break;
+        }
+    }
 
-	/**
-	 * Key typed on screen
-	 * @param e
-	 */
-	@Override
-	public void keyTyped(KeyEvent e) {}
+    /**
+     * Press on canvas
+     *
+     * @param event
+     */
+    @Override
+    public void mousePressed(MouseEvent event) {
+    }
 
-	/**
-	 * Key pressed on screen
-	 * @param e
-	 */
-	@Override
-	public void keyPressed(KeyEvent e) {
-		switch(e.getKeyCode()) {
-			case VK_W: case VK_UP:
-				view.getPlayer().move(Cell.Direction.UP);
-				break;
-			case VK_A: case VK_LEFT:
-				view.getPlayer().move(Cell.Direction.LEFT);
-				break;
-			case VK_S: case VK_DOWN:
-				view.getPlayer().move(Cell.Direction.DOWN);
-				break;
-			case VK_D: case VK_RIGHT:
-				view.getPlayer().move(Cell.Direction.RIGHT);
-				break;
-		}
-	}
+    /**
+     * Release on canvas
+     *
+     * @param event
+     */
+    @Override
+    public void mouseReleased(MouseEvent event) {
+    }
 
-	/**
-	 * Key released on screen
-	 * @param e
-	 */
-	@Override
-	public void keyReleased(KeyEvent e) {}
+    /**
+     * Mouse enter canvas
+     *
+     * @param event
+     */
+    @Override
+    public void mouseEntered(MouseEvent event) {
+    }
+
+    /**
+     * Mouse exit canvas
+     *
+     * @param event
+     */
+    @Override
+    public void mouseExited(MouseEvent event) {
+    }
+
+    /**
+     * Key typed on screen
+     *
+     * @param e
+     */
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    /**
+     * Key released on screen
+     *
+     * @param e
+     */
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
 }

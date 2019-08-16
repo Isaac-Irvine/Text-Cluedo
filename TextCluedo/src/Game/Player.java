@@ -60,6 +60,14 @@ public class Player {
     }
 
     /**
+     * Return the current state of the player
+     * @return
+     */
+    public PlayerState getCurrentState() {
+        return currentState;
+    }
+
+    /**
      * Have your turn
      */
     /*public void turn() {
@@ -155,17 +163,64 @@ public class Player {
             visitedCells.add(suspect.getLocation());
             suspect.move(direction);
 
-            movesLeft--;
-            // STOP MOVING
-            if (suspect.getCurrentRoom() != null || movesLeft <= 0) {
-                currentState = PlayerState.FINISHED;
-                game.getGameView().updatePlayerState();
-            }
-
-        } else {
-            throw new Error("Yeah sorry you can't leave rooms yet");
+            move();
         }
+    }
 
+    /**
+     * Move to a given cell
+     *
+     * @param cell
+     */
+    public void move(Cell cell) {
+        if (currentState != PlayerState.MOVING) return;
+
+        if (visitedCells.contains(cell)) return;
+
+        // move to an adjacent cell
+        if (suspect.getCurrentRoom() == null) {
+            Set<Cell.Direction> directions = suspect.getAvaliableDirections(visitedCells);
+
+            for (Cell.Direction direction : directions) {
+                Cell neighbour = suspect.getBoard().getNeighbourCell(suspect.getLocation(), direction);
+
+                // yes valid
+                if (neighbour == cell) {
+                    visitedCells.add(suspect.getLocation());
+                    suspect.move(direction);
+
+                    move();
+
+                    return;
+                }
+            }
+        }
+        // move out of a room by clicking the exit
+        else if (cell instanceof RoomEntranceCell) {
+            RoomEntranceCell exit = (RoomEntranceCell) cell;
+
+            List<RoomEntranceCell> cellList = suspect.getAvaliableRoomExits();
+
+            if (cellList.contains(exit)) {
+                visitedCells.add(exit);
+                suspect.exitRoom(exit);
+                move();
+            }
+        }
+    }
+
+    /**
+     * Finish of a move
+     * <p>
+     * will change states if all moves left are used up
+     */
+    private void move() {
+        movesLeft--;
+        // STOP MOVING
+        if (suspect.getCurrentRoom() != null || movesLeft <= 0 || suspect.getAvaliableDirections(visitedCells).size() == 0) {
+            currentState = PlayerState.FINISHED;
+            game.getGameView().updatePlayerState();
+        }
         game.getGameView().repaint();
     }
 

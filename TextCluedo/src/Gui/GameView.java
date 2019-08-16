@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
  * The entire game view
  */
 public class GameView extends Canvas {
-	private static final int CELL_SIZE = 16;
+	public static final int CELL_SIZE = 16;
 	private static final int GAME_WIDTH = 26;
 	private static final int GAME_HEIGHT = 27;
 	private static final int CANVAS_WIDTH = GAME_WIDTH * CELL_SIZE;
@@ -136,4 +136,12 @@ public class GameView extends Canvas {
     public Player getPlayer() {
 	    return currentPlayer;
     }
+
+	/**
+	 * Get the game
+	 * @return
+	 */
+	public Game getGame() {
+    	return game;
+	}
 }
