@@ -18,16 +18,19 @@ public class GameView extends Canvas {
 
 	private Game game;
 	private Window window;
-	private Player player;
+	private Player currentPlayer;
 	private GameController controller;
+
+	private JPanel buttonPanel, cardPanel;
 
 	/**
 	 * Create a game view for a player
 	 */
-	public GameView(Game game, Player player) {
+	public GameView(Window window, Game game, Player player) {
 		this.game = game;
-		this.window = new Window(player.toString(), 800, 600);
-		this.player = player;
+		game.setGameView(this);
+		this.window = window;
+		this.currentPlayer = player;
 		this.controller = new GameController(this);
 
 		window.removeAll();
@@ -43,38 +46,62 @@ public class GameView extends Canvas {
 		int footerSize = (window.getHeight() - CANVAS_HEIGHT) / 2;
 
 		// button panel
-		JPanel buttonPanel = new JPanel(new FlowLayout());
-
-		JButton rollDice = new JButton("Roll Dice");
-		rollDice.addActionListener((ActionEvent e) -> {
-			player.rollDice();
-			repaint();
-		});
-		buttonPanel.add(rollDice);
-
-		JButton finishTurn = new JButton("Finish Turn");
-		finishTurn.addActionListener((ActionEvent e) -> {
-			player.finishTurn();
-			repaint();
-		});
-		buttonPanel.add(finishTurn);
-
-		JButton accuse = new JButton("Accuse");
-		buttonPanel.add(accuse);
-
+		buttonPanel = new JPanel(new FlowLayout());
 		buttonPanel.setSize(new Dimension(window.getWidth(), footerSize));
 		window.add(buttonPanel);
 
 		// card panel
-		JPanel cardPanel = new JPanel(new FlowLayout());
-		for (Card card : player.getCards()) {
-			cardPanel.add(new JButton(card.toString()));
-		}
+		cardPanel = new JPanel(new FlowLayout());
 		cardPanel.setSize(new Dimension(window.getWidth(), footerSize));
 		window.add(cardPanel);
 
-		window.redraw();
+		swapPlayer(player);
+		updatePlayerState();
 	}
+
+    /**
+     * Update the buttons on the screen to reflect the player's current state
+     */
+    public void updatePlayerState() {
+	    buttonPanel.removeAll();
+
+        JButton rollDice = new JButton("Roll Dice");
+        rollDice.addActionListener((ActionEvent e) -> {
+            currentPlayer.rollDice();
+            repaint();
+        });
+        buttonPanel.add(rollDice);
+
+        JButton finishTurn = new JButton("Finish Turn");
+        finishTurn.addActionListener((ActionEvent e) -> {
+            currentPlayer.finishTurn();
+            repaint();
+        });
+        buttonPanel.add(finishTurn);
+
+        JButton accuse = new JButton("Accuse");
+        buttonPanel.add(accuse);
+
+        window.redraw();
+    }
+
+    /**
+     * Swap the current player in the window to the view of another player
+     * @param newPlayer
+     */
+	public void swapPlayer(Player newPlayer) {
+	    this.currentPlayer = newPlayer;
+
+	    window.setTitle(newPlayer.toString());
+
+	    // update the cards
+	    cardPanel.removeAll();
+        for (Card card : newPlayer.getCards()) {
+            cardPanel.add(new JButton(card.toString()));
+        }
+
+        window.redraw();
+    }
 
 	/**
 	 * Draw the current state of the board

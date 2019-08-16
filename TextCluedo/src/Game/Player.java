@@ -133,7 +133,7 @@ public class Player {
 	 * Finish turn
 	 */
 	public void finishTurn() {
-		if (currentState != PlayerState.WAITING) return;
+		if (currentState != PlayerState.FINISHED) return;
 
 		currentState = PlayerState.NOT_TURN;
 		game.nextPlayer();

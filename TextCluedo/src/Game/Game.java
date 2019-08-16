@@ -1,5 +1,7 @@
 package Game;
 
+import Gui.GameView;
+
 import java.util.*;
 
 /**
@@ -12,6 +14,7 @@ public class Game {
 	private int currentTurn;
 	private int incorrectGuesses;
 	private boolean gameOver;
+	private GameView gameView;
 
 	public static final String[] allSuspects = new String[]
 			{"Miss Scarlett", "Col. Mustard", "Mrs. White", "Mr. Green", "Mrs. Peacock", "Prof. Plum"};
@@ -141,6 +144,14 @@ public class Game {
 			currentTurn++;
 			currentTurn %= players.size();
 		}
+	}
+
+	/**
+	 * Set the game view
+	 * @param gameView
+	 */
+	public void setGameView(GameView gameView) {
+		this.gameView = gameView;
 	}
 
 	/**
@@ -354,6 +365,8 @@ public class Game {
 
 		if (!player.hasAccused()) {
 			player.turn();
+			gameView.swapPlayer(player);
+			gameView.updatePlayerState();
 		} else nextPlayer();
 
 	}

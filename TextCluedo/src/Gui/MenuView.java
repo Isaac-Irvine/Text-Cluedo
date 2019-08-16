@@ -64,10 +64,7 @@ public class MenuView {
             List<String> characterStrings = new ArrayList<>();
             for(JComboBox comboBox : playerCharacters) characterStrings.add((String) comboBox.getSelectedItem());
             Game game = new Game(characterStrings);
-            for(int i = 0; i < playerCharacters.size(); i++) {
-                new GameView(game, game.getPlayer(i));
-            }
-            window.close();
+            new GameView(window, game, game.getPlayer(0));
         });
 
 

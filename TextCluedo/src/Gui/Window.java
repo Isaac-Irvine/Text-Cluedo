@@ -57,4 +57,12 @@ public class Window extends JPanel {
     public void close() {
         frame.dispose();
     }
+
+    /**
+     * Change the title of the window
+     * @param title
+     */
+    public void setTitle(String title) {
+        frame.setTitle(title);
+    }
 }
