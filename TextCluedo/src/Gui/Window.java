@@ -65,4 +65,12 @@ public class Window extends JPanel {
     public void setTitle(String title) {
         frame.setTitle(title);
     }
+
+    /**
+     * Set the menu bar
+     * @param menuBar
+     */
+    public void setMenuBar(JMenuBar menuBar) {
+        frame.setJMenuBar(menuBar);
+    }
 }

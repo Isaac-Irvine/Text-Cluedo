@@ -37,6 +37,18 @@ public class GameView extends Canvas {
         window.removeAll();
         window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
 
+        // menu bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu gameMenu = new JMenu("Game");
+        menuBar.add(gameMenu);
+        JMenuItem restart = new JMenuItem("Restart");
+        JMenuItem btMenu = new JMenuItem("Back To Menu");
+        JMenuItem exit = new JMenuItem("Exit");
+        gameMenu.add(restart);
+        gameMenu.add(btMenu);
+        gameMenu.add(exit);
+        window.setMenuBar(menuBar);
+
 
         // create game canvas
         setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -75,8 +87,11 @@ public class GameView extends Canvas {
 
         Player.PlayerState state = currentPlayer.getCurrentState();
 
+        // moving state
         if (state == Player.PlayerState.MOVING) {
             buttonPanel.add(dice);
+            JLabel turnsLeftLabel = new JLabel("Moves Left: " + currentPlayer.getMovesLeft());
+            buttonPanel.add(turnsLeftLabel);
         } else {
             // roll dice
             if (state == Player.PlayerState.WAITING) {

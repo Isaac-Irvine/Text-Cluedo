@@ -78,60 +78,12 @@ public class Player {
     }
 
     /**
-     * Have your turn
+     * Get turns left
+     * @return
      */
-    /*public void turn() {
-
-        boolean hasMoved = false;
-        boolean finishedTurn = false;
-
-        List<String> options = new ArrayList<String>() {{
-            add("0: Roll Dice");
-            add("1: Check Cards");
-            add("2: Make Accusation");
-            add("3: Quit Game");
-        }};
-        if (suspect.getCurrentRoom() != null) options.add("4: Make Suggestion");
-
-        while (!finishedTurn) {
-            System.out.println("\nChoose Action: " + options);
-            System.out.print("Enter the number corresponding to your chosen action: ");
-            String option = scanner.nextLine();
-
-            // roll dice or finish turn (both will be 0)
-            if (option.equals("0")) {
-                // roll dice
-                if (!hasMoved) {
-                    int diceRoll = (int) (Math.random() * 6) + (int) (Math.random() * 6) + 2;
-                    move(diceRoll);
-                    hasMoved = true;
-                    options.set(0, "0: Finish Turn");
-                    if (suspect.getCurrentRoom() != null && options.size() <= 4) options.add("4: Make Suggestion");
-                }
-                // finish turn
-                else {
-                    finishedTurn = true;
-                }
-            }
-            // check cards
-            else if (option.equals("1")) {
-                System.out.println("\nYour Cards: " + cards);
-            }
-            // accusation
-            else if (option.equals("2")) {
-                accuse();
-                finishedTurn = true;
-            } else if (option.equals("3")) {
-                game.endGame(null);
-                finishedTurn = true;
-            }
-            // suggestion (will finish your turn)
-            else if (option.equals("4") && suspect.getCurrentRoom() != null) {
-                suggest();
-                finishedTurn = true;
-            }
-        }
-    }*/
+    public int getMovesLeft() {
+        return movesLeft;
+    }
 
     /**
      * Have your turn
@@ -227,9 +179,9 @@ public class Player {
         // STOP MOVING
         if (suspect.getCurrentRoom() != null || movesLeft <= 0 || suspect.getAvaliableDirections(visitedCells).size() == 0) {
             currentState = PlayerState.FINISHED;
-            game.getGameView().updatePlayerState();
         }
         game.getGameView().repaint();
+        game.getGameView().updatePlayerState();
     }
 
     /**
