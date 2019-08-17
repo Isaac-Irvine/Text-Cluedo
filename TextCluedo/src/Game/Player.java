@@ -9,7 +9,9 @@ import java.util.*;
  * Has an ID, a suspect that they control and a list of cards.
  */
 public class Player {
-
+    /**
+     * Possible states of the player
+     */
     public enum PlayerState {
         WAITING, MOVING, FINISHED, NOT_TURN
     }
@@ -63,6 +65,7 @@ public class Player {
 
     /**
      * Return the current state of the player
+     *
      * @return
      */
     public PlayerState getCurrentState() {
@@ -71,6 +74,7 @@ public class Player {
 
     /**
      * Get suspect
+     *
      * @return
      */
     public Suspect getSuspect() {
@@ -79,6 +83,7 @@ public class Player {
 
     /**
      * Get turns left
+     *
      * @return
      */
     public int getMovesLeft() {
@@ -196,6 +201,13 @@ public class Player {
 
 
     /**
+     * Set hasAccused to true
+     */
+    public void setAccused() {
+        hasAccused = true;
+    }
+
+    /**
      * Has accused
      *
      * @return
@@ -207,8 +219,10 @@ public class Player {
     /**
      * Make an accusation
      */
+    @Deprecated
     public void accuse() {
         hasAccused = true;
+
 
         System.out.println("\nPick the circumstances of the murder correctly to win the game. Guess incorrectly and you will be out.\n");
 
@@ -228,6 +242,7 @@ public class Player {
     /**
      * Make a suggestion within a room
      */
+    @Deprecated
     public void suggest() {
         if (suspect.getCurrentRoom() == null) throw new IllegalStateException("Cannot suggest if not in a room.");
 
@@ -268,6 +283,7 @@ public class Player {
      *
      * @param nSteps
      */
+    @Deprecated
     public void move(int nSteps) {
         if (game != null) System.out.println("\nDice roll: " + nSteps);
         Set<Cell> visited = new HashSet<>();
@@ -367,7 +383,7 @@ public class Player {
 
 
     /**
-     * Game.Player string.
+     * Player string.
      *
      * @return
      */

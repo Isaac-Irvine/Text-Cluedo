@@ -161,9 +161,28 @@ public class Game {
 		System.out.print("\n" + board.toString());
 	}
 
+
+	/**
+	 * Check if an accusation is correct
+	 */
+	public boolean checkAccusation(Card suspect, Card weapon, Card room) {
+		return suspect.equals(this.murderer) && weapon.equals(this.weapon) && room.equals(this.room);
+	}
+
+	/**
+	 * When a player accuses incorrectly, take them out of the game.
+	 * @param player Returns if the game is still running
+	 */
+	public boolean invalidAccusation(Player player) {
+		player.setAccused();
+		incorrectGuesses++;
+		return incorrectGuesses < players.size();
+	}
+
 	/**
 	 * Check if an accusation is correct for a given player
 	 */
+	@Deprecated
 	public void checkAccusation(Player player, Card suspect, Card weapon, Card room) {
 		if (suspect.equals(this.murderer) && weapon.equals(this.weapon) && room.equals(this.room)) {
 			endGame(player);
@@ -178,6 +197,7 @@ public class Game {
 	 * Check a suggestion. The function assumes the person with the index currentTurn is the player that made the suggestion.
 	 * The first player in a clockwise direction that contains one of the suggested cards is asked to refute.
 	 */
+	@Deprecated
 	public void checkSuggestion(Card suspect, Card weapon, Card room) {
 		Player currentPlayer = players.get(currentTurn);
 
@@ -231,6 +251,7 @@ public class Game {
 	 *
 	 * @param correctGuess non-null will imply this person has won the game.
 	 */
+	@Deprecated
 	public void endGame(Player correctGuess) {
 		if (correctGuess != null)
 			System.out.println("\n" + correctGuess + " has accused correctly and has won the game!");
@@ -248,6 +269,7 @@ public class Game {
 	 * @param scanner
 	 * @return
 	 */
+	@Deprecated
 	public static Card getSuspectInput(Scanner scanner) {
 		System.out.print("Suspects: [");
 		for (int i = 0; i < allSuspects.length; i++) {
@@ -271,6 +293,7 @@ public class Game {
 	 * @param scanner
 	 * @return
 	 */
+	@Deprecated
 	public static Card getWeaponInput(Scanner scanner) {
 		System.out.print("Weapons: [");
 		for (int i = 0; i < allWeapons.length; i++) {
@@ -294,6 +317,7 @@ public class Game {
 	 * @param scanner
 	 * @return
 	 */
+	@Deprecated
 	public static Card getRoomInput(Scanner scanner) {
 		System.out.print("Rooms: [");
 		for (int i = 0; i < allRooms.length; i++) {
@@ -316,6 +340,7 @@ public class Game {
 	 *
 	 * @return
 	 */
+	@Deprecated
 	public static int getNumberInput(Scanner scanner, int min, int max) {
 		while (true) {
 			String line = scanner.nextLine();

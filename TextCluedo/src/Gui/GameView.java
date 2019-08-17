@@ -41,9 +41,16 @@ public class GameView extends Canvas {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
         menuBar.add(gameMenu);
+
         JMenuItem restart = new JMenuItem("Restart");
+        restart.addActionListener((ActionEvent e) -> restartGame());
+
         JMenuItem btMenu = new JMenuItem("Back To Menu");
+        btMenu.addActionListener((ActionEvent e) -> backToMenu());
+
         JMenuItem exit = new JMenuItem("Exit");
+        exit.addActionListener((ActionEvent e) -> this.window.close());
+
         gameMenu.add(restart);
         gameMenu.add(btMenu);
         gameMenu.add(exit);
@@ -117,19 +124,115 @@ public class GameView extends Canvas {
             // accuse
             JButton accuse = new JButton("Accuse");
             accuse.setFocusable(false);
+            accuse.addActionListener((ActionEvent e) -> accuse());
             buttonPanel.add(accuse);
 
             // suggest
             if (currentPlayer.getSuspect().getCurrentRoom() != null) {
-				JButton suggest = new JButton("Suggest");
-				suggest.setFocusable(false);
-				buttonPanel.add(suggest);
+                JButton suggest = new JButton("Suggest");
+                suggest.setFocusable(false);
+                buttonPanel.add(suggest);
             }
 
         }
 
         buttonPanel.repaint();
         window.redraw();
+    }
+
+    /**
+     * Go back to the menu view
+     */
+    public void backToMenu() {
+        window.close();
+    }
+
+    /**
+     * Restart the game
+     */
+    public void restartGame() {
+        JOptionPane.showMessageDialog(window, "Not implemented yet.");
+    }
+
+
+    /**
+     * Open accuse dialog
+     */
+    public void accuse() {
+        // create panel layouts
+        JPanel accusePanel = new JPanel();
+        accusePanel.setLayout(new FlowLayout());
+
+        // suspects
+        JPanel suspectPanel = new JPanel();
+        accusePanel.add(suspectPanel);
+        suspectPanel.setLayout(new BoxLayout(suspectPanel, BoxLayout.Y_AXIS));
+        suspectPanel.add(new JLabel("Pick Suspect:"));
+        ButtonGroup suspects = new ButtonGroup();
+        for (String suspect : Game.allSuspects) {
+            JRadioButton button = new JRadioButton(suspect);
+            button.setActionCommand(suspect);
+            suspects.add(button);
+            suspectPanel.add(button);
+        }
+
+        // weapons
+        JPanel weaponPanel = new JPanel();
+        accusePanel.add(weaponPanel);
+        weaponPanel.setLayout(new BoxLayout(weaponPanel, BoxLayout.Y_AXIS));
+        weaponPanel.add(new JLabel("Pick Weapon:"));
+        ButtonGroup weapons = new ButtonGroup();
+        for (String weapon : Game.allWeapons) {
+            JRadioButton button = new JRadioButton(weapon);
+            button.setActionCommand(weapon);
+            weapons.add(button);
+            weaponPanel.add(button);
+        }
+
+        // rooms
+        JPanel roomPanel = new JPanel();
+        accusePanel.add(roomPanel);
+        roomPanel.setLayout(new BoxLayout(roomPanel, BoxLayout.Y_AXIS));
+        roomPanel.add(new JLabel("Pick Room:"));
+        ButtonGroup rooms = new ButtonGroup();
+        for (String room : Game.allRooms) {
+            JRadioButton button = new JRadioButton(room);
+            button.setActionCommand(room);
+            rooms.add(button);
+            roomPanel.add(button);
+        }
+
+        // get the picked option
+        int option = JOptionPane.showConfirmDialog(window, accusePanel, "Pick the circumstances of the murder", JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == 0 && suspects.getSelection() != null && weapons.getSelection() != null && rooms.getSelection() != null) {
+            Card suspect = new Card(suspects.getSelection().getActionCommand(), Card.CardType.SUSPECT);
+            Card weapon = new Card(weapons.getSelection().getActionCommand(), Card.CardType.WEAPON);
+            Card room = new Card(rooms.getSelection().getActionCommand(), Card.CardType.ROOM);
+
+            // Check the accusation
+            if (game.checkAccusation(suspect, weapon, room)) {
+                JOptionPane.showMessageDialog(window, "You guessed correctly! You win the game!");
+                backToMenu();
+            } else {
+                JOptionPane.showMessageDialog(window, "You guessed incorrectly! You are no longer in the game!");
+                if (game.invalidAccusation(currentPlayer)) {
+                    game.nextPlayer();
+                }
+                else {
+                    JOptionPane.showMessageDialog(window, "No one managed to guess the circumstances of the murder correctly so the game is over.");
+                    backToMenu();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Open suggest dialog
+     */
+    public void suggest() {
+
     }
 
     /**
