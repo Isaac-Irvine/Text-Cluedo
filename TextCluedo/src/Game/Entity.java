@@ -1,5 +1,7 @@
 package Game;
 
+import java.awt.*;
+
 /**
  * Represents a movable item on the board.
  */
@@ -57,4 +59,13 @@ public abstract class Entity {
     protected Cell getLocation() {
         return location;
     }
+
+    /**
+     * Draw the entity
+     * @param g the graphics to draw to
+     * @param x
+     * @param y
+     * @param cellSize
+     */
+	public abstract void draw(Graphics2D g, int x, int y, int cellSize);
 }

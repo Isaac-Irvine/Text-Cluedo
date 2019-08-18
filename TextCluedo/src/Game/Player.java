@@ -1,5 +1,7 @@
 package Game;
 
+import Gui.Dice;
+
 import java.util.*;
 
 /**
@@ -7,12 +9,24 @@ import java.util.*;
  * Has an ID, a suspect that they control and a list of cards.
  */
 public class Player {
+    /**
+     * Possible states of the player
+     */
+    public enum PlayerState {
+        WAITING, MOVING, FINISHED, NOT_TURN
+    }
+
     private int num;
     private Game game;
     private Suspect suspect;
     private Scanner scanner;
     private boolean hasAccused;
     private List<Card> cards;
+    private PlayerState currentState;
+
+    // movement
+    private int movesLeft = 0;
+    private Set<Cell> visitedCells = new HashSet<>();
 
     /**
      * Initialize a player object
@@ -28,6 +42,7 @@ public class Player {
         this.scanner = scanner;
         this.suspect = suspect;
         this.hasAccused = false;
+        this.currentState = PlayerState.NOT_TURN;
         cards = new ArrayList<>();
     }
 
@@ -42,59 +57,154 @@ public class Player {
 
 
     /**
+     * Get a list of cards
+     */
+    public List<Card> getCards() {
+        return Collections.unmodifiableList(cards);
+    }
+
+    /**
+     * Return the current state of the player
+     *
+     * @return
+     */
+    public PlayerState getCurrentState() {
+        return currentState;
+    }
+
+    /**
+     * Get suspect
+     *
+     * @return
+     */
+    public Suspect getSuspect() {
+        return suspect;
+    }
+
+    /**
+     * Get turns left
+     *
+     * @return
+     */
+    public int getMovesLeft() {
+        return movesLeft;
+    }
+
+    /**
      * Have your turn
      */
     public void turn() {
+        currentState = PlayerState.WAITING;
+    }
 
-        boolean hasMoved = false;
-        boolean finishedTurn = false;
+    /**
+     * Roll the dice
+     */
+    public void rollDice(Dice dice) {
+        if (currentState != PlayerState.WAITING) return;
 
-        List<String> options = new ArrayList<String>() {{
-            add("0: Roll Dice");
-            add("1: Check Cards");
-            add("2: Make Accusation");
-            add("3: Quit Game");
-        }};
-        if (suspect.getCurrentRoom() != null) options.add("4: Make Suggestion");
+        currentState = PlayerState.MOVING;
+        dice.roll();
 
-        while (!finishedTurn) {
-            System.out.println("\nChoose Action: " + options);
-            System.out.print("Enter the number corresponding to your chosen action: ");
-            String option = scanner.nextLine();
+        this.movesLeft = dice.getValue();
+        visitedCells = new HashSet<>();
 
-            // roll dice or finish turn (both will be 0)
-            if (option.equals("0")) {
-                // roll dice
-                if (!hasMoved) {
-                    int diceRoll = (int) (Math.random() * 6) + (int) (Math.random() * 6) + 2;
-                    move(diceRoll);
-                    hasMoved = true;
-                    options.set(0, "0: Finish Turn");
-                    if (suspect.getCurrentRoom() != null && options.size() <= 4) options.add("4: Make Suggestion");
+        game.getGameView().updatePlayerState();
+    }
+
+    /**
+     * Move in a given direction
+     *
+     * @param direction
+     */
+    public void move(Cell.Direction direction) {
+        if (currentState != PlayerState.MOVING) return;
+
+        // check if move is valid
+        if (suspect.getCurrentRoom() == null) {
+            Set<Cell.Direction> directions = suspect.getAvaliableDirections(visitedCells);
+            if (!directions.contains(direction)) return; // invalid direction
+
+            visitedCells.add(suspect.getLocation());
+            suspect.move(direction);
+
+            move();
+        }
+    }
+
+    /**
+     * Move to a given cell
+     *
+     * @param cell
+     */
+    public void move(Cell cell) {
+        if (currentState != PlayerState.MOVING) return;
+
+        if (visitedCells.contains(cell)) return;
+
+        // move to an adjacent cell
+        if (suspect.getCurrentRoom() == null) {
+            Set<Cell.Direction> directions = suspect.getAvaliableDirections(visitedCells);
+
+            for (Cell.Direction direction : directions) {
+                Cell neighbour = suspect.getBoard().getNeighbourCell(suspect.getLocation(), direction);
+
+                // yes valid
+                if (neighbour == cell) {
+                    visitedCells.add(suspect.getLocation());
+                    suspect.move(direction);
+
+                    move();
+
+                    return;
                 }
-                // finish turn
-                else {
-                    finishedTurn = true;
-                }
-            }
-            // check cards
-            else if (option.equals("1")) {
-                System.out.println("\nYour Cards: " + cards);
-            }
-            // accusation
-            else if (option.equals("2")) {
-                accuse();
-                finishedTurn = true;
-            } else if (option.equals("3")) {
-                game.endGame(null);
-                finishedTurn = true;
-            }
-            // suggestion (will finish your turn)
-            else if (option.equals("4") && suspect.getCurrentRoom() != null) {
-                suggest();
-                finishedTurn = true;
             }
         }
+        // move out of a room by clicking the exit
+        else if (cell instanceof RoomEntranceCell) {
+            RoomEntranceCell exit = (RoomEntranceCell) cell;
+
+            List<RoomEntranceCell> cellList = suspect.getAvaliableRoomExits();
+
+            if (cellList.contains(exit)) {
+                visitedCells.add(exit);
+                suspect.exitRoom(exit);
+                move();
+            }
+        }
+    }
+
+    /**
+     * Finish of a move
+     * <p>
+     * will change states if all moves left are used up
+     */
+    private void move() {
+        movesLeft--;
+        // STOP MOVING
+        if (suspect.getCurrentRoom() != null || movesLeft <= 0 || suspect.getAvaliableDirections(visitedCells).size() == 0) {
+            currentState = PlayerState.FINISHED;
+        }
+        game.getGameView().repaint();
+        game.getGameView().updatePlayerState();
+    }
+
+    /**
+     * Finish turn
+     */
+    public void finishTurn() {
+        if (currentState != PlayerState.FINISHED) return;
+
+        currentState = PlayerState.NOT_TURN;
+        game.nextPlayer();
+    }
+
+
+    /**
+     * Set hasAccused to true
+     */
+    public void setAccused() {
+        hasAccused = true;
     }
 
     /**
@@ -109,8 +219,10 @@ public class Player {
     /**
      * Make an accusation
      */
+    @Deprecated
     public void accuse() {
         hasAccused = true;
+
 
         System.out.println("\nPick the circumstances of the murder correctly to win the game. Guess incorrectly and you will be out.\n");
 
@@ -130,6 +242,7 @@ public class Player {
     /**
      * Make a suggestion within a room
      */
+    @Deprecated
     public void suggest() {
         if (suspect.getCurrentRoom() == null) throw new IllegalStateException("Cannot suggest if not in a room.");
 
@@ -162,7 +275,7 @@ public class Player {
 
         Card roomCard = new Card(suspect.getCurrentRoom().getName(), Card.CardType.ROOM);
 
-        game.checkSuggestion( otherSuspectCard, weaponCard, roomCard);
+        game.checkSuggestion(otherSuspectCard, weaponCard, roomCard);
     }
 
     /**
@@ -170,6 +283,7 @@ public class Player {
      *
      * @param nSteps
      */
+    @Deprecated
     public void move(int nSteps) {
         if (game != null) System.out.println("\nDice roll: " + nSteps);
         Set<Cell> visited = new HashSet<>();
@@ -269,7 +383,7 @@ public class Player {
 
 
     /**
-     * Game.Player string.
+     * Player string.
      *
      * @return
      */

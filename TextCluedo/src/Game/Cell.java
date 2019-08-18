@@ -1,9 +1,12 @@
 package Game;
 
+import java.awt.*;
+
 /**
  * A grid space on the board
  */
 public abstract class Cell {
+
 	/**
 	 * A direction
 	 */
@@ -130,4 +133,35 @@ public abstract class Cell {
         return entity;
     }
 
+	/**
+	 * Draw cell and entity onto the graphics
+	 * @param g graphics to draw to
+	 * @param x
+	 * @param y
+	 * @param cellSize
+	 */
+    public void draw(Graphics2D g, int x, int y, int cellSize) {
+		drawCell(g, x, y, cellSize);
+		if(entity != null) {
+			entity.draw(g, x, y, cellSize);
+		}
+	}
+
+	/**
+	 * Draw the cell onto the graphics
+	 * @param g graphics to draw to
+	 * @param x
+	 * @param y
+	 * @param cellSize
+	 */
+	public abstract void drawCell(Graphics2D g, int x, int y, int cellSize);
+
+
+    /**
+     * For testing
+     * @return
+     */
+	public String toString() {
+        return getClass().getName() + " at " + x + "," + y;
+    }
 }

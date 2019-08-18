@@ -1,5 +1,7 @@
 package Game;
 
+import java.awt.*;
+
 /**
  * Wall Cell
  */
@@ -14,5 +16,11 @@ public class WallCell extends Cell {
      */
     public WallCell(int x, int y, char[] chars) {
         super(x, y, chars, false);
+    }
+
+    @Override
+    public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+        g.setColor(Color.BLUE);
+        g.fillRect(x, y, cellSize, cellSize);
     }
 }

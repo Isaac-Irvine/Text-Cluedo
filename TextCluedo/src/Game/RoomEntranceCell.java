@@ -1,5 +1,7 @@
 package Game;
 
+import java.awt.*;
+
 /**
  * Room Entrance Cell
  */
@@ -36,4 +38,10 @@ public class RoomEntranceCell extends Cell{
     public Room getRoom() {
         return room;
     }
+
+	@Override
+	public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+		g.setColor(Color.GREEN);
+		g.fillRect(x, y, cellSize, cellSize);
+	}
 }

@@ -1,5 +1,7 @@
 package Game;
 
+import java.awt.*;
+
 /**
  * Free Cell
  */
@@ -11,5 +13,11 @@ public class FreeCell extends Cell {
      */
     public FreeCell(int x, int y) {
         super(x, y, "  ".toCharArray(), true);
+    }
+
+    @Override
+    public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+        g.setColor(Color.WHITE);
+        g.fillRect(x, y, cellSize, cellSize);
     }
 }
