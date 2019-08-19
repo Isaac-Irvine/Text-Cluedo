@@ -2,6 +2,7 @@ package Gui;
 
 import Game.*;
 
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,18 +22,23 @@ public class GameView extends Canvas {
     private Player currentPlayer;
     private GameController controller;
 
+    private List<String> characters;
+    private List<String> names;
+
     private JPanel buttonPanel, cardPanel;
     private Dice dice;
 
     /**
-     * Create a game view for a player
+     * Create a view containing the game
      */
-    public GameView(Window window, Game game, Player player) {
-        this.game = game;
-        game.setGameView(this);
+    public GameView(Window window, List<String> characters, List<String> names) {
         this.window = window;
-        this.currentPlayer = player;
-        this.controller = new GameController(this);
+        this.characters = characters;
+        this.names = names;
+
+        game = new Game(this, characters, names);
+        currentPlayer = game.getPlayer(0);
+        controller = new GameController(this);
 
         window.removeAll();
         window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
@@ -82,7 +88,7 @@ public class GameView extends Canvas {
         cardPanel.setSize(new Dimension(window.getWidth(), footerSize));
         window.add(cardPanel);
 
-        swapPlayer(player);
+        swapPlayer(currentPlayer);
         updatePlayerState();
     }
 
@@ -144,14 +150,19 @@ public class GameView extends Canvas {
      * Go back to the menu view
      */
     public void backToMenu() {
-        window.close();
+        new MenuView(window);
     }
 
     /**
      * Restart the game
      */
     public void restartGame() {
-        JOptionPane.showMessageDialog(window, "Not implemented yet.");
+        game = new Game(this, characters, names);
+        currentPlayer = game.getPlayer(0);
+
+        swapPlayer(currentPlayer);
+        repaint();
+        window.redraw();
     }
 
 
@@ -251,6 +262,7 @@ public class GameView extends Canvas {
             JLabel c = new JLabel(card.toString());
             cardPanel.add(c);
         }
+        cardPanel.repaint();
 
         window.redraw();
     }

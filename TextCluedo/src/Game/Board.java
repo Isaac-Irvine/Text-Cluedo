@@ -169,7 +169,11 @@ public class Board {
                 int y = startingPlacesScanner.nextInt();
                 String initials = startingPlacesScanner.next();
                 char[] chars = {initials.charAt(0), initials.charAt(1)};
-                Suspect suspect = new Suspect(this, x, y, chars);
+
+                int index = Game.suspectAliases.get(initials.toLowerCase());
+                String fileName = Game.suspectImages[index];
+
+                Suspect suspect = new Suspect(this, x, y, chars, fileName);
                 allSuspects.add(suspect);
             }
             startingPlacesScanner.close();
@@ -183,7 +187,7 @@ public class Board {
         List<Room> allRoomsShuffled = new ArrayList<>(allRooms);
         Collections.shuffle(allRoomsShuffled);
         for (int i = 0; i < allRemainingWeapons.length && i < allRoomsShuffled.size(); i++) {
-            allWeapons.add(new Weapon(this, allRoomsShuffled.get(i), allRemainingWeapons[i].toCharArray()));
+            allWeapons.add(new Weapon(this, allRoomsShuffled.get(i), allRemainingWeapons[i].toCharArray(), Game.weaponImages[i]));
         }
     }
 

@@ -14,14 +14,7 @@ public class Cluedo {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MenuView view = new MenuView();
-
-
-		//Scanner scan = new Scanner(System.in);
-		//System.out.print("Enter the number of players (3-6): ");
-
-		//int nPlayers = Game.getNumberInput(scan, 3, 6);
-
-		//new Game(nPlayers);
+		Window window = new Window("", 800, 600);
+		new MenuView(window);
 	}
 }

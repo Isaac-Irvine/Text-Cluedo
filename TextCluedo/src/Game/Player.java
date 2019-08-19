@@ -16,30 +16,28 @@ public class Player {
         WAITING, MOVING, FINISHED, NOT_TURN
     }
 
-    private int num;
     private Game game;
     private Suspect suspect;
     private Scanner scanner;
     private boolean hasAccused;
     private List<Card> cards;
     private PlayerState currentState;
+    private String name;
 
     // movement
     private int movesLeft = 0;
     private Set<Cell> visitedCells = new HashSet<>();
 
     /**
-     * Initialize a player object
+     * Initialize a player object with a username
      *
      * @param game
-     * @param scanner the scanner for input. Use System.in for user-input
-     * @param num
+     * @param name    the userrname
      * @param suspect
      */
-    public Player(Game game, Scanner scanner, int num, Suspect suspect) {
+    public Player(Game game, String name, Suspect suspect) {
         this.game = game;
-        this.num = num;
-        this.scanner = scanner;
+        this.name = name;
         this.suspect = suspect;
         this.hasAccused = false;
         this.currentState = PlayerState.NOT_TURN;
@@ -216,6 +214,46 @@ public class Player {
         return hasAccused;
     }
 
+
+    /**
+     * If the player has a card
+     *
+     * @param card
+     * @return
+     */
+    public boolean hasCard(Card card) {
+        return cards.contains(card);
+    }
+
+
+    /**
+     * Player string.
+     *
+     * @return
+     */
+    public String toString() {
+        return name;
+    }
+
+
+    /**
+     * Initialize a player object (OLD)
+     *
+     * @param game
+     * @param scanner the scanner for input. Use System.in for user-input
+     * @param num
+     * @param suspect
+     */
+    @Deprecated
+    public Player(Game game, Scanner scanner, int num, Suspect suspect) {
+        this.game = game;
+        this.name = "Player " + num;
+        this.scanner = scanner;
+        this.suspect = suspect;
+        this.hasAccused = false;
+        cards = new ArrayList<>();
+    }
+
     /**
      * Make an accusation
      */
@@ -369,25 +407,5 @@ public class Player {
 
         if (game != null) game.draw();
         if (game != null) System.out.println("Movement finished.");
-    }
-
-    /**
-     * If the player has a card
-     *
-     * @param card
-     * @return
-     */
-    public boolean hasCard(Card card) {
-        return cards.contains(card);
-    }
-
-
-    /**
-     * Player string.
-     *
-     * @return
-     */
-    public String toString() {
-        return "Player " + num + ": " + suspect.getChars()[0] + suspect.getChars()[1];
     }
 }

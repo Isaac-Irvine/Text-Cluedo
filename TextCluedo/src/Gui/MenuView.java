@@ -24,8 +24,10 @@ public class MenuView {
     /**
      * Create a menu view
      */
-    public MenuView() {
-        window = new Window("Pick players", 800, 600);
+    public MenuView(Window window) {
+        this.window = window;
+        window.setTitle("Pick players");
+        window.removeAll();
         window.setLayout(new BoxLayout(window, BoxLayout.Y_AXIS));
         window.add(Box.createRigidArea(new Dimension(window.getWidth(), (window.getHeight() - PANEL_HEIGHT * 8) / 2)));
 
@@ -60,12 +62,7 @@ public class MenuView {
         window.add(footerPanel);
         JButton doneButton = new JButton("Done");
 
-        doneButton.addActionListener((ActionEvent e) -> {
-            List<String> characterStrings = new ArrayList<>();
-            for(JComboBox comboBox : playerCharacters) characterStrings.add((String) comboBox.getSelectedItem());
-            Game game = new Game(characterStrings);
-            new GameView(window, game, game.getPlayer(0));
-        });
+        doneButton.addActionListener((ActionEvent e) -> createGame());
 
 
         JButton exitButton = new JButton("Exit");
@@ -117,6 +114,7 @@ public class MenuView {
         updateCharacterValidity();
     }
 
+
     /**
      * Update the colours of the combo boxes to show validity
      */
@@ -129,10 +127,43 @@ public class MenuView {
             }
 
             // valid if this character selection is unique
-            if(nCopies == 1) character.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+            if (nCopies == 1) character.setBorder(BorderFactory.createLineBorder(Color.BLUE));
             else character.setBorder(BorderFactory.createLineBorder(Color.RED));
         }
 
         window.redraw();
+    }
+
+
+    /**
+     * Create the game if possible to
+     */
+    public void createGame() {
+        // check validity
+        Set<String> characterSet = new HashSet<>();
+        Set<String> nameSet = new HashSet<>();
+        for (JComboBox comboBox : playerCharacters) {
+            if (!characterSet.add((String) comboBox.getSelectedItem())) {
+                // invalid
+                JOptionPane.showMessageDialog(window, "Error: There are multiple players using the same character.");
+                return;
+            }
+        }
+        for (JTextField field : playerNames) {
+            if (!nameSet.add(field.getText())) {
+                // invalid
+                JOptionPane.showMessageDialog(window, "Error: There are multiple players using the same username.");
+                return;
+            }
+        }
+
+
+        List<String> characterStrings = new ArrayList<>();
+        for (JComboBox comboBox : playerCharacters) characterStrings.add((String) comboBox.getSelectedItem());
+
+        List<String> names = new ArrayList<>();
+        for (JTextField field : playerNames) names.add(field.getText());
+
+        new GameView(window, characterStrings, names);
     }
 }

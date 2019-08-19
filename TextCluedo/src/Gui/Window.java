@@ -31,6 +31,7 @@ public class Window extends JPanel {
      * Update the window
      */
     public void redraw() {
+        repaint();
         frame.revalidate();
     }
 
