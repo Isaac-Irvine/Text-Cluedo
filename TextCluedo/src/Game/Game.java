@@ -2,6 +2,7 @@ package Game;
 
 import Gui.GameView;
 
+import javax.swing.*;
 import java.util.*;
 
 /**
@@ -151,6 +152,74 @@ public class Game {
         return suspect.equals(this.murderer) && weapon.equals(this.weapon) && room.equals(this.room);
     }
 
+
+    /**
+     * Check a suggestion by asking each player
+     * @param suspect
+     * @param weapon
+     * @param room
+     */
+    public void checkSuggestion(Card suspect, Card weapon, Card room) {
+        // move the weapon and suspect to the room
+        Suspect otherSuspect = null;
+        for (int i = 0; i < allSuspects.length; i++) {
+            if (suspect.getName().equals(allSuspects[i]))
+                otherSuspect = getBoard().getSuspect(i);
+        }
+        if (otherSuspect == null) {
+            throw new Error("Can't find that suspect in allSuspects");
+        }
+        Weapon otherWeapon = null;
+        for (int i = 0; i < allWeapons.length; i++) {
+            if (weapon.getName().equals(allWeapons[i]))
+                otherWeapon = getBoard().getWeapon(i);
+        }
+        if (otherWeapon == null) {
+            throw new Error("Can't find that suspect in allWeapons");
+        }
+
+        Player currentPlayer = getPlayer(currentTurn);
+
+        otherSuspect.enterRoom(currentPlayer.getSuspect().getCurrentRoom());
+        otherWeapon.moveTo(currentPlayer.getSuspect().getCurrentRoom().getAvailableCell());
+
+        gameView.repaint();
+
+
+        // check with other players
+
+        int pIndex = currentTurn;
+        pIndex++;
+        pIndex %= players.size();
+
+        while (currentTurn != pIndex) {
+            Player player = players.get(pIndex);
+
+            // get list of cards they have from the suspect, weapon and room.
+            List<Card> refutedCards = new ArrayList<>();
+            if (player.hasCard(suspect)) refutedCards.add(suspect);
+            if (player.hasCard(weapon)) refutedCards.add(weapon);
+            if (player.hasCard(room)) refutedCards.add(room);
+
+            if (refutedCards.size() == 0) {
+                // player does not have that card
+                gameView.showMessage(player + ": You cannot refute any of those cards");
+            } else {
+                // found a player with one of those cards.
+                gameView.showRefutationDialog(player, refutedCards);
+                nextPlayer();
+
+                return;
+            }
+
+            pIndex++;
+            pIndex %= players.size();
+        }
+
+        gameView.showMessage("No players could refute those cards.");
+        nextPlayer();
+    }
+
     /**
      * When a player accuses incorrectly, take them out of the game.
      *
@@ -248,7 +317,7 @@ public class Game {
      * The first player in a clockwise direction that contains one of the suggested cards is asked to refute.
      */
     @Deprecated
-    public void checkSuggestion(Card suspect, Card weapon, Card room) {
+    public void checkSuggestionOld(Card suspect, Card weapon, Card room) {
         Player currentPlayer = players.get(currentTurn);
 
         System.out.println();

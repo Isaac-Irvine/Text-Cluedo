@@ -137,6 +137,7 @@ public class GameView extends Canvas {
             if (currentPlayer.getSuspect().getCurrentRoom() != null) {
                 JButton suggest = new JButton("Suggest");
                 suggest.setFocusable(false);
+                suggest.addActionListener((ActionEvent e) -> suggest());
                 buttonPanel.add(suggest);
             }
 
@@ -223,15 +224,15 @@ public class GameView extends Canvas {
 
             // Check the accusation
             if (game.checkAccusation(suspect, weapon, room)) {
-                JOptionPane.showMessageDialog(window, "You guessed correctly! You win the game!");
+                showMessage( "You guessed correctly! You win the game!");
                 backToMenu();
             } else {
-                JOptionPane.showMessageDialog(window, "You guessed incorrectly! You are no longer in the game!");
+                showMessage( "You guessed incorrectly! You are no longer in the game!");
                 if (game.invalidAccusation(currentPlayer)) {
                     game.nextPlayer();
                 }
                 else {
-                    JOptionPane.showMessageDialog(window, "No one managed to guess the circumstances of the murder correctly so the game is over.");
+                    showMessage( "No one managed to guess the circumstances of the murder correctly so the game is over.");
                     backToMenu();
                 }
             }
@@ -243,6 +244,76 @@ public class GameView extends Canvas {
      * Open suggest dialog
      */
     public void suggest() {
+        // create panel layouts
+        JPanel accusePanel = new JPanel();
+        accusePanel.setLayout(new FlowLayout());
+
+        // suspects
+        JPanel suspectPanel = new JPanel();
+        accusePanel.add(suspectPanel);
+        suspectPanel.setLayout(new BoxLayout(suspectPanel, BoxLayout.Y_AXIS));
+        suspectPanel.add(new JLabel("Pick Suspect:"));
+        ButtonGroup suspects = new ButtonGroup();
+        for (String suspect : Game.allSuspects) {
+            JRadioButton button = new JRadioButton(suspect);
+            button.setActionCommand(suspect);
+            suspects.add(button);
+            suspectPanel.add(button);
+        }
+
+        // weapons
+        JPanel weaponPanel = new JPanel();
+        accusePanel.add(weaponPanel);
+        weaponPanel.setLayout(new BoxLayout(weaponPanel, BoxLayout.Y_AXIS));
+        weaponPanel.add(new JLabel("Pick Weapon:"));
+        ButtonGroup weapons = new ButtonGroup();
+        for (String weapon : Game.allWeapons) {
+            JRadioButton button = new JRadioButton(weapon);
+            button.setActionCommand(weapon);
+            weapons.add(button);
+            weaponPanel.add(button);
+        }
+
+        // get the picked option
+        int option = JOptionPane.showConfirmDialog(window, accusePanel, "Suggest the weapon and suspect for the murder", JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == 0 && suspects.getSelection() != null && weapons.getSelection() != null) {
+            Card suspect = new Card(suspects.getSelection().getActionCommand(), Card.CardType.SUSPECT);
+            Card weapon = new Card(weapons.getSelection().getActionCommand(), Card.CardType.WEAPON);
+            Card room = new Card(currentPlayer.getSuspect().getCurrentRoom().getName(), Card.CardType.ROOM);
+
+            game.checkSuggestion(suspect, weapon, room);
+            game.nextPlayer();
+        }
+
+    }
+
+    /**
+     * Show the dialog that appears when someone has one of the cards that someone suggested
+     * @param player
+     * @param refutedCards
+     */
+    public void showRefutationDialog(Player player, List<Card> refutedCards) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        panel.add(new JLabel(player + ", Pick a card to refute:"));
+
+        ButtonGroup cards = new ButtonGroup();
+        boolean first = true;
+        for (Card card : refutedCards) {
+            JRadioButton button = new JRadioButton(card.toString());
+            button.setActionCommand(card.toString());
+            panel.add(button);
+            cards.add(button);
+
+            if(first) button.setSelected(true);
+            first = false;
+        }
+
+        JOptionPane.showMessageDialog(window, panel, player + ", choose a card to refute to " + currentPlayer, JOptionPane.QUESTION_MESSAGE);
+
+        showMessage(currentPlayer + ", " + player + " has the " + cards.getSelection().getActionCommand() + " card.");
 
     }
 
@@ -269,8 +340,6 @@ public class GameView extends Canvas {
 
     /**
      * Draw the current state of the board
-     * <p>
-     * TODO: Improve the drawing to include images.
      */
     public void paint(Graphics g) {
         Board board = game.getBoard();
@@ -299,5 +368,13 @@ public class GameView extends Canvas {
      */
     public Game getGame() {
         return game;
+    }
+
+    /**
+     * Show a message dialog
+     * @param message
+     */
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(window, message);
     }
 }
