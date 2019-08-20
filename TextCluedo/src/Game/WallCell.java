@@ -18,9 +18,14 @@ public class WallCell extends Cell {
         super(x, y, chars, false);
     }
 
+    /**
+     * Draw wall
+     * @param g graphics to draw to
+     * @param cellSize
+     */
     @Override
-    public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+    public void drawCell(Graphics g, int cellSize) {
         g.setColor(Color.BLUE);
-        g.fillRect(x, y, cellSize, cellSize);
+        g.fillRect(getX() * cellSize, getY() * cellSize, cellSize, cellSize);
     }
 }

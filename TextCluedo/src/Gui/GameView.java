@@ -80,21 +80,21 @@ public class GameView extends Canvas {
 
         // footer panel sizes
         int footerSize = (window.getHeight() - CANVAS_HEIGHT);
-        dice = new Dice((int)(footerSize * 0.35));
+        dice = new Dice((int) (footerSize * 0.2));
 
         // message panel
         messagePanel = new JPanel();
-        messagePanel.setSize(new Dimension(window.getWidth(), (int)(footerSize * 0.2)));
+        messagePanel.setMaximumSize(new Dimension(window.getWidth(), (int) (footerSize * 0.2)));
         window.add(messagePanel);
 
         // button panel
         buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setSize(new Dimension(window.getWidth(), (int)(footerSize * 0.4)));
+        buttonPanel.setMaximumSize(new Dimension(window.getWidth(), (int) (footerSize * 0.4)));
         window.add(buttonPanel);
 
         // card panel
         cardPanel = new JPanel(new FlowLayout());
-        cardPanel.setSize(new Dimension(window.getWidth(), (int)(footerSize * 0.4)));
+        cardPanel.setMaximumSize(new Dimension(window.getWidth(), (int) (footerSize * 0.4)));
         window.add(cardPanel);
 
         swapPlayer(currentPlayer);
@@ -190,7 +190,8 @@ public class GameView extends Canvas {
      */
     public void accuse() {
         // check in correct state
-        if (currentPlayer.getCurrentState() == Player.PlayerState.MOVING || currentPlayer.getCurrentState() == Player.PlayerState.NOT_TURN) return;
+        if (currentPlayer.getCurrentState() == Player.PlayerState.MOVING || currentPlayer.getCurrentState() == Player.PlayerState.NOT_TURN)
+            return;
 
         // create panel layouts
         JPanel accusePanel = new JPanel();
@@ -245,15 +246,14 @@ public class GameView extends Canvas {
 
             // Check the accusation
             if (game.checkAccusation(suspect, weapon, room)) {
-                showMessage( "You guessed correctly! You win the game!");
+                showMessage("You guessed correctly! You win the game!");
                 backToMenu();
             } else {
-                showMessage( "You guessed incorrectly! You are no longer in the game!");
+                showMessage("You guessed incorrectly! You are no longer in the game!");
                 if (game.invalidAccusation(currentPlayer)) {
                     game.nextPlayer();
-                }
-                else {
-                    showMessage( "No one managed to guess the circumstances of the murder correctly so the game is over.");
+                } else {
+                    showMessage("No one managed to guess the circumstances of the murder correctly so the game is over.");
                     backToMenu();
                 }
             }
@@ -267,7 +267,7 @@ public class GameView extends Canvas {
     public void suggest() {
         // check in correct state
         if (currentPlayer.getCurrentState() == Player.PlayerState.MOVING || currentPlayer.getCurrentState() == Player.PlayerState.NOT_TURN ||
-            currentPlayer.getSuspect().getCurrentRoom() == null) return;
+                currentPlayer.getSuspect().getCurrentRoom() == null) return;
 
 
         // create panel layouts
@@ -316,6 +316,7 @@ public class GameView extends Canvas {
 
     /**
      * Show the dialog that appears when someone has one of the cards that someone suggested
+     *
      * @param player
      * @param refutedCards
      */
@@ -333,7 +334,7 @@ public class GameView extends Canvas {
             panel.add(button);
             cards.add(button);
 
-            if(first) button.setSelected(true);
+            if (first) button.setSelected(true);
             first = false;
         }
 
@@ -362,6 +363,8 @@ public class GameView extends Canvas {
         }
         cardPanel.repaint();
 
+        repaint();
+
         window.redraw();
     }
 
@@ -374,7 +377,20 @@ public class GameView extends Canvas {
         for (int y = 0; y < GAME_HEIGHT; y++) {
             for (int x = 0; x < GAME_WIDTH; x++) {
                 Cell cell = board.getCell(x, y);
-                cell.draw((Graphics2D) g, x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE);
+                cell.draw(g, CELL_SIZE);
+            }
+        }
+
+        // highlight the player
+        currentPlayer.getSuspect().getLocation().highlightCell(g, CELL_SIZE, Color.YELLOW);
+        currentPlayer.getSuspect().getLocation().outlineCell(g, CELL_SIZE, Color.YELLOW);
+
+        // highlight possible moves
+        if (currentPlayer.getCurrentState() == Player.PlayerState.MOVING) {
+            List<Cell> cells = currentPlayer.getAvailableCells();
+
+            for(Cell cell : cells) {
+                cell.highlightCell(g, CELL_SIZE, new Color(255, 255, 50));
             }
         }
     }
@@ -399,6 +415,7 @@ public class GameView extends Canvas {
 
     /**
      * Show a message dialog
+     *
      * @param message
      */
     public void showMessage(String message) {
@@ -407,6 +424,7 @@ public class GameView extends Canvas {
 
     /**
      * Get the dice
+     *
      * @return
      */
     public Dice getDice() {

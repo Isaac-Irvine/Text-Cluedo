@@ -16,8 +16,8 @@ public class FreeCell extends Cell {
     }
 
     @Override
-    public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+    public void drawCell(Graphics g, int cellSize) {
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, cellSize, cellSize);
+        g.fillRect(getX() * cellSize, getY() * cellSize, cellSize, cellSize);
     }
 }

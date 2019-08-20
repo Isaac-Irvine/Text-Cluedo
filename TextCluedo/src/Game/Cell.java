@@ -136,25 +136,49 @@ public abstract class Cell {
 	/**
 	 * Draw cell and entity onto the graphics
 	 * @param g graphics to draw to
-	 * @param x
-	 * @param y
-	 * @param cellSize
+     * @param cellSize
 	 */
-    public void draw(Graphics2D g, int x, int y, int cellSize) {
-		drawCell(g, x, y, cellSize);
+    public void draw(Graphics g, int cellSize) {
+		drawCell(g, cellSize);
 		if(entity != null) {
-			entity.draw(g, x, y, cellSize);
+			entity.draw(g, cellSize);
 		}
 	}
 
 	/**
 	 * Draw the cell onto the graphics
 	 * @param g graphics to draw to
-	 * @param x
-	 * @param y
 	 * @param cellSize
 	 */
-	public abstract void drawCell(Graphics2D g, int x, int y, int cellSize);
+	public abstract void drawCell(Graphics g, int cellSize);
+
+
+    /**
+     * Highlight this cell with a given color
+     * @param g
+     * @param cellSize
+     * @param color
+     */
+	public void highlightCell(Graphics g, int cellSize, Color color) {
+        g.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(), 127));
+        g.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+    }
+
+    /**
+     * Outline this cell with a given color
+     * @param g
+     * @param cellSize
+     * @param color
+     */
+    public void outlineCell(Graphics g, int cellSize, Color color) {
+        Graphics2D g2 = (Graphics2D) g;
+
+        g2.setStroke(new BasicStroke(2));
+        g2.setColor(color);
+        g2.drawRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        g2.setStroke(new BasicStroke(1));
+    }
+
 
 
     /**

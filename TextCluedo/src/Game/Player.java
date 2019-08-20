@@ -131,6 +131,28 @@ public class Player {
     }
 
     /**
+     * Get a list of all the clickable cells
+     */
+    public List<Cell> getAvailableCells() {
+        List<Cell> cells = new ArrayList<>();
+
+        if (suspect.getCurrentRoom() == null) {
+            Set<Cell.Direction> directions = suspect.getAvaliableDirections(visitedCells);
+
+            for (Cell.Direction direction : directions) {
+                Cell neighbour = suspect.getBoard().getNeighbourCell(suspect.getLocation(), direction);
+                cells.add(neighbour);
+            }
+        }
+        else {
+            cells.addAll(suspect.getAvaliableRoomExits());
+        }
+
+        return cells;
+    }
+
+
+    /**
      * Move to a given cell
      *
      * @param cell

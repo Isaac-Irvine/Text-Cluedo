@@ -50,8 +50,8 @@ public class Dice extends Canvas {
 
         g.setColor(Color.BLACK);
 
-        drawDots(g, num1, -1, -1);
-        drawDots(g, num2, (int) (size * 1.25) - 1, -1);
+        drawDots(g, num1, 0, 0);
+        drawDots(g, num2, (int) (size * 1.25), 0);
 
         g.drawRect(0, 0, size - 1, size - 1);
         g.drawRect((int) (size * 1.25), 0, size - 1, size - 1);

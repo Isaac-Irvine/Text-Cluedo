@@ -140,12 +140,10 @@ public class Suspect extends Entity {
      * Draw the suspect
      *
      * @param g        the graphics to draw to
-     * @param x
-     * @param y
      * @param cellSize
      */
     @Override
-    public void draw(Graphics2D g, int x, int y, int cellSize) {
-        g.drawImage(image, x, y, cellSize, cellSize, null);
+    public void draw(Graphics g, int cellSize) {
+        g.drawImage(image, getLocation().getX() * cellSize, getLocation().getY() * cellSize, cellSize, cellSize, null);
     }
 }

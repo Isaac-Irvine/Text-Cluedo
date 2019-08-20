@@ -30,9 +30,14 @@ public class RoomEntityCell extends Cell {
         return room;
     }
 
+    /**
+     * Draw room entity cell
+     * @param g graphics to draw to
+     * @param cellSize
+     */
     @Override
-    public void drawCell(Graphics2D g, int x, int y, int cellSize) {
+    public void drawCell(Graphics g, int cellSize) {
         g.setColor(Color.WHITE);
-        g.fillRect(x, y, cellSize, cellSize);
+        g.fillRect(getX() * cellSize, getY() * cellSize, cellSize, cellSize);
     }
 }

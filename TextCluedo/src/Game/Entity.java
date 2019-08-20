@@ -56,7 +56,7 @@ public abstract class Entity {
      * The location
      * @return
      */
-    protected Cell getLocation() {
+    public Cell getLocation() {
         return location;
     }
 
@@ -67,5 +67,5 @@ public abstract class Entity {
      * @param y
      * @param cellSize
      */
-	public abstract void draw(Graphics2D g, int x, int y, int cellSize);
+	public abstract void draw(Graphics g, int cellSize);
 }
