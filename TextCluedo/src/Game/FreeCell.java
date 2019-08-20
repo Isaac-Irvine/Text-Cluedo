@@ -1,6 +1,7 @@
 package Game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Free Cell
@@ -11,13 +12,7 @@ public class FreeCell extends Cell {
      * @param x
      * @param y
      */
-    public FreeCell(int x, int y) {
-        super(x, y, "  ".toCharArray(), true);
-    }
-
-    @Override
-    public void drawCell(Graphics g, int cellSize) {
-        g.setColor(Color.WHITE);
-        g.fillRect(getX() * cellSize, getY() * cellSize, cellSize, cellSize);
+    public FreeCell(int x, int y, BufferedImage image) {
+        super(x, y, "  ".toCharArray(), true, image);
     }
 }

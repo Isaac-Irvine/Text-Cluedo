@@ -1,6 +1,7 @@
 package Game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * A grid space on the board
@@ -61,6 +62,7 @@ public abstract class Cell {
     private final char[] chars;
     private boolean free;
     private Entity entity;
+    private BufferedImage image;
 
     /**
      * Constructor for a cell object
@@ -70,13 +72,14 @@ public abstract class Cell {
      * @param chars default characters to represent the cell
      * @param free  if the cell can be moved onto
      */
-    public Cell(int x, int y, char[] chars, boolean free) {
+    public Cell(int x, int y, char[] chars, boolean free, BufferedImage image) {
         this.x = x;
         this.y = y;
         if (chars.length != 2) throw new IllegalArgumentException("Cells may only be represented by 2 characters.");
         this.chars = chars;
         this.free = free;
         this.entity = null;
+        this.image = image;
     }
 
 
@@ -150,7 +153,9 @@ public abstract class Cell {
 	 * @param g graphics to draw to
 	 * @param cellSize
 	 */
-	public abstract void drawCell(Graphics g, int cellSize);
+	public void drawCell(Graphics g, int cellSize) {
+        g.drawImage(image, x * cellSize, y * cellSize, cellSize, cellSize, null);
+    }
 
 
     /**

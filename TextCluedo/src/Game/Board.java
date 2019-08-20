@@ -1,5 +1,7 @@
 package Game;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -36,6 +38,14 @@ public class Board {
         File startingPlacesFile = new File(dir + startingPlacesFileName);
         File boardFile = new File(dir + boardFileName);
 
+        // load board image
+        BufferedImage image;
+        try {
+            image = ImageIO.read(new File("img/board.png"));
+        } catch (IOException e) {
+            throw new Error("Cant load board image");
+        }
+
         // make lists
         allRooms = new ArrayList<>();
         allWeapons = new ArrayList<>();
@@ -60,7 +70,7 @@ public class Board {
 
                 for (int x = 0; x < width; x++) {
                     char[] chars = {line.charAt(x * 2), line.charAt(x * 2 + 1)};
-                    cells[y][x] = new WallCell(x, y, chars);
+                    cells[y][x] = new WallCell(x, y, chars, image.getSubimage(x * 16, y * 16, 16, 16));
                 }
             }
         } catch (IOException e) {
@@ -89,7 +99,7 @@ public class Board {
                     int x = roomsScanner.nextInt();
                     int y = roomsScanner.nextInt();
                     Cell oldCell = cells[y][x];
-                    RoomEntityCell newCell = new RoomEntityCell(room, x, y, oldCell.getChars());
+                    RoomEntityCell newCell = new RoomEntityCell(room, x, y, oldCell.getChars(), image.getSubimage(x * 16, y * 16, 16, 16));
                     room.addEntityCell(newCell);
                     cells[y][x] = newCell;
                 } else if (token.equals("door")) {
@@ -111,7 +121,7 @@ public class Board {
                         throw new Error("Unknown direction in room file: " + directionAsString);
                     }
                     Cell oldCell = cells[y][x];
-                    RoomEntranceCell newCell = new RoomEntranceCell(room, x, y, oldCell.getChars(), direction);
+                    RoomEntranceCell newCell = new RoomEntranceCell(room, x, y, oldCell.getChars(), direction, image.getSubimage(x * 16, y * 16, 16, 16));
                     room.addEntranceCell(newCell);
                     cells[y][x] = newCell;
                 } else {
@@ -137,7 +147,7 @@ public class Board {
                     freeSpaceScanner.nextLine();
                     continue;
                 } else if (token.equals(".")) {
-                    cells[y][x] = new FreeCell(x, y);
+                    cells[y][x] = new FreeCell(x, y, image.getSubimage(x * 16, y * 16, 16, 16));
                 } else if (!token.equals("X")) {
                     throw new Error("Got unknown token in Free space file");
                 }

@@ -1,6 +1,7 @@
 package Game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Cells in the room where entities can appear
@@ -15,8 +16,8 @@ public class RoomEntityCell extends Cell {
      * @param y
      * @param chars
      */
-    public RoomEntityCell(Room room, int x, int y, char[] chars) {
-        super(x, y, chars, true);
+    public RoomEntityCell(Room room, int x, int y, char[] chars, BufferedImage image) {
+        super(x, y, chars, true, image);
 
         this.room = room;
     }
@@ -28,16 +29,5 @@ public class RoomEntityCell extends Cell {
      */
     public Room getRoom() {
         return room;
-    }
-
-    /**
-     * Draw room entity cell
-     * @param g graphics to draw to
-     * @param cellSize
-     */
-    @Override
-    public void drawCell(Graphics g, int cellSize) {
-        g.setColor(Color.WHITE);
-        g.fillRect(getX() * cellSize, getY() * cellSize, cellSize, cellSize);
     }
 }
