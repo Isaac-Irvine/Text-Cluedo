@@ -2,8 +2,12 @@ package Gui;
 
 import Game.*;
 
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -25,7 +29,7 @@ public class GameView extends Canvas {
     private List<String> characters;
     private List<String> names;
 
-    private JPanel buttonPanel, cardPanel;
+    private JPanel messagePanel, buttonPanel, cardPanel;
     private Dice dice;
 
     /**
@@ -75,17 +79,22 @@ public class GameView extends Canvas {
         addKeyListener(controller);
 
         // footer panel sizes
-        int footerSize = (window.getHeight() - CANVAS_HEIGHT) / 2;
-        dice = new Dice(footerSize);
+        int footerSize = (window.getHeight() - CANVAS_HEIGHT);
+        dice = new Dice((int)(footerSize * 0.35));
+
+        // message panel
+        messagePanel = new JPanel();
+        messagePanel.setSize(new Dimension(window.getWidth(), (int)(footerSize * 0.2)));
+        window.add(messagePanel);
 
         // button panel
         buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setSize(new Dimension(window.getWidth(), footerSize));
+        buttonPanel.setSize(new Dimension(window.getWidth(), (int)(footerSize * 0.4)));
         window.add(buttonPanel);
 
         // card panel
         cardPanel = new JPanel(new FlowLayout());
-        cardPanel.setSize(new Dimension(window.getWidth(), footerSize));
+        cardPanel.setSize(new Dimension(window.getWidth(), (int)(footerSize * 0.4)));
         window.add(cardPanel);
 
         swapPlayer(currentPlayer);
@@ -97,6 +106,9 @@ public class GameView extends Canvas {
      */
     public void updatePlayerState() {
         buttonPanel.removeAll();
+        messagePanel.removeAll();
+
+        messagePanel.add(new JLabel(currentPlayer + "'s turn."));
 
         Player.PlayerState state = currentPlayer.getCurrentState();
 
@@ -105,10 +117,13 @@ public class GameView extends Canvas {
             buttonPanel.add(dice);
             JLabel turnsLeftLabel = new JLabel("Moves Left: " + currentPlayer.getMovesLeft());
             buttonPanel.add(turnsLeftLabel);
+
+            messagePanel.add(new JLabel("Use the mouse or WASD/Arrow Keys to move."));
         } else {
             // roll dice
             if (state == Player.PlayerState.WAITING) {
                 JButton rollDice = new JButton("Roll Dice");
+                rollDice.setMnemonic(KeyEvent.VK_R);
                 rollDice.setFocusable(false);
                 rollDice.addActionListener((ActionEvent e) -> {
                     currentPlayer.rollDice(dice);
@@ -119,6 +134,7 @@ public class GameView extends Canvas {
             // finish turn
             else {
                 JButton finishTurn = new JButton("Finish Turn");
+                finishTurn.setMnemonic(KeyEvent.VK_F);
                 finishTurn.setFocusable(false);
                 finishTurn.addActionListener((ActionEvent e) -> {
                     currentPlayer.finishTurn();
@@ -129,6 +145,7 @@ public class GameView extends Canvas {
 
             // accuse
             JButton accuse = new JButton("Accuse");
+            accuse.setMnemonic(KeyEvent.VK_A);
             accuse.setFocusable(false);
             accuse.addActionListener((ActionEvent e) -> accuse());
             buttonPanel.add(accuse);
@@ -136,6 +153,7 @@ public class GameView extends Canvas {
             // suggest
             if (currentPlayer.getSuspect().getCurrentRoom() != null) {
                 JButton suggest = new JButton("Suggest");
+                suggest.setMnemonic(KeyEvent.VK_S);
                 suggest.setFocusable(false);
                 suggest.addActionListener((ActionEvent e) -> suggest());
                 buttonPanel.add(suggest);
@@ -171,6 +189,9 @@ public class GameView extends Canvas {
      * Open accuse dialog
      */
     public void accuse() {
+        // check in correct state
+        if (currentPlayer.getCurrentState() == Player.PlayerState.MOVING || currentPlayer.getCurrentState() == Player.PlayerState.NOT_TURN) return;
+
         // create panel layouts
         JPanel accusePanel = new JPanel();
         accusePanel.setLayout(new FlowLayout());
@@ -244,6 +265,11 @@ public class GameView extends Canvas {
      * Open suggest dialog
      */
     public void suggest() {
+        // check in correct state
+        if (currentPlayer.getCurrentState() == Player.PlayerState.MOVING || currentPlayer.getCurrentState() == Player.PlayerState.NOT_TURN ||
+            currentPlayer.getSuspect().getCurrentRoom() == null) return;
+
+
         // create panel layouts
         JPanel accusePanel = new JPanel();
         accusePanel.setLayout(new FlowLayout());
@@ -331,6 +357,7 @@ public class GameView extends Canvas {
         cardPanel.removeAll();
         for (Card card : newPlayer.getCards()) {
             JLabel c = new JLabel(card.toString());
+            c.setBorder(new CompoundBorder(BorderFactory.createLineBorder(Color.BLACK), new EmptyBorder(5, 10, 5, 10)));
             cardPanel.add(c);
         }
         cardPanel.repaint();
@@ -376,5 +403,13 @@ public class GameView extends Canvas {
      */
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(window, message);
+    }
+
+    /**
+     * Get the dice
+     * @return
+     */
+    public Dice getDice() {
+        return dice;
     }
 }

@@ -46,6 +46,7 @@ public class GameController implements MouseListener, KeyListener {
 
     /**
      * Key pressed on screen
+     * Events should all have safe guards to ensure they only occur during the correct state
      *
      * @param e
      */
@@ -57,16 +58,24 @@ public class GameController implements MouseListener, KeyListener {
                 view.getPlayer().move(Cell.Direction.UP);
                 break;
             case VK_A:
+                view.accuse();
             case VK_LEFT:
                 view.getPlayer().move(Cell.Direction.LEFT);
                 break;
             case VK_S:
+                view.suggest();
             case VK_DOWN:
                 view.getPlayer().move(Cell.Direction.DOWN);
                 break;
             case VK_D:
             case VK_RIGHT:
                 view.getPlayer().move(Cell.Direction.RIGHT);
+                break;
+            case VK_R:
+                view.getPlayer().rollDice(view.getDice());
+                break;
+            case VK_F:
+                view.getPlayer().finishTurn();
                 break;
         }
     }
